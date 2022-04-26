@@ -2,7 +2,7 @@ package com.binus.nvjbackend.rest.web.service;
 
 import com.binus.nvjbackend.model.entity.SystemParameter;
 import com.binus.nvjbackend.model.enums.ErrorCode;
-import com.binus.nvjbackend.model.enums.SystemParameterType;
+import com.binus.nvjbackend.model.enums.SystemParameterTypes;
 import com.binus.nvjbackend.model.exception.BaseException;
 import com.binus.nvjbackend.repository.SystemParameterRepository;
 import com.binus.nvjbackend.rest.web.model.request.systemparameter.SystemParameterRequest;
@@ -64,7 +64,7 @@ public class SystemParameterServiceImpl implements SystemParameterService {
   }
 
   private void validateSystemParameterRequest(SystemParameterRequest request) {
-    if (!SystemParameterType.getAllNames().contains(request.getType())) {
+    if (!SystemParameterTypes.getAllNames().contains(request.getType())) {
       throw new BaseException(ErrorCode.SYSPARAM_TYPE_INVALID);
     }
   }
@@ -77,11 +77,11 @@ public class SystemParameterServiceImpl implements SystemParameterService {
   }
 
   private Object convertToValue(SystemParameter systemParameter) {
-    if (systemParameter.getType().equals(SystemParameterType.STRING.name())) {
+    if (systemParameter.getType().equals(SystemParameterTypes.STRING.name())) {
       return systemParameter.getValue();
-    } else if (systemParameter.getType().equals(SystemParameterType.INTEGER.name())) {
+    } else if (systemParameter.getType().equals(SystemParameterTypes.INTEGER.name())) {
       return Integer.valueOf(systemParameter.getValue());
-    } else if (systemParameter.getType().equals(SystemParameterType.ARRAY_STRING.name())) {
+    } else if (systemParameter.getType().equals(SystemParameterTypes.ARRAY_STRING.name())) {
       return systemParameter.getValue().split(",");
     }
     return null;

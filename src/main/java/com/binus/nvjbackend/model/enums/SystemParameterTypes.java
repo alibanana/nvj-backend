@@ -4,14 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public enum SystemParameterType {
+public enum SystemParameterTypes {
   STRING,
   INTEGER,
   ARRAY_STRING;
 
   public static List<String> getAllNames() {
-    return Arrays.stream(SystemParameterType.values())
-        .map(SystemParameterType::name)
+    return Arrays.stream(SystemParameterTypes.values())
+        .map(SystemParameterTypes::name)
         .collect(Collectors.toList());
   }
 }
