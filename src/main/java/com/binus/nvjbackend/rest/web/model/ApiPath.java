@@ -21,4 +21,8 @@ public class ApiPath {
   public static final String SYSTEM_PARAMETER_UPDATE_BY_KEY = "/updateByKey";
 
   public static final String SYSTEM_PARAMETER_DELETE_BY_KEY = "/deleteByKey";
+
+  public static final String BASE_PATH_IMAGE = BASE_PATH_API + "/image";
+
+  public static final String UPLOAD_IMAGE = "/upload";
 }

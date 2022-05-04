@@ -20,4 +20,10 @@ public class SysparamProperties {
 
   @Value("${sysparam.jwt.cookiename}")
   private String jwtCookieName;
+
+  @Value("${sysparam.file.upload-dir}")
+  private String fileStorageLocation;
+
+  @Value("${sysparam.nginx.file-url}")
+  private String nginxFileUrl;
 }
