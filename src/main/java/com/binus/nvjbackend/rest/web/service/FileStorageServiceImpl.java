@@ -49,20 +49,20 @@ public class FileStorageServiceImpl implements FileStorageService {
   }
 
   @Override
-  public byte[] retrieveFile(String filename) {
+  public void validateFileExistsByFilename(String filename) {
     try {
-      return FileUtils.readFileToByteArray(
-          new File(sysparamProperties.getFileStorageLocation() + filename));
-    } catch (IOException e) {
+      rootDir.resolve(filename);
+    } catch (Exception e) {
       throw new BaseException(ErrorCode.FILE_NOT_FOUND_OR_UNREADABLE);
     }
   }
 
   @Override
-  public void validateFileExistsByFilename(String filename) {
+  public byte[] retrieveFile(String filename) {
     try {
-      rootDir.resolve(filename);
-    } catch (Exception e) {
+      return FileUtils.readFileToByteArray(
+          new File(sysparamProperties.getFileStorageLocation() + filename));
+    } catch (IOException e) {
       throw new BaseException(ErrorCode.FILE_NOT_FOUND_OR_UNREADABLE);
     }
   }
@@ -77,6 +77,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
     validateFileNotEmpty(file);
     validateFileName(filename);
+    validateFileDoesntExists(filename);
     return storeFile(file, filename);
   }
 
@@ -86,6 +87,11 @@ public class FileStorageServiceImpl implements FileStorageService {
 
   private void validateFileName(String filename) {
     if (filename.contains("..")) throw new BaseException(ErrorCode.FILENAME_INVALID);
+  }
+
+  private void validateFileDoesntExists(String filename) {
+    if (Files.exists(Paths.get(sysparamProperties.getFileStorageLocation() + filename)))
+      throw new BaseException(ErrorCode.FILE_ALREADY_EXISTS);
   }
 
   private Path storeFile(MultipartFile file, String filename) {

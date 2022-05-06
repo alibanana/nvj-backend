@@ -23,8 +23,10 @@ public enum ErrorCode {
       "System parameter with the requested key already exists"),
   USERNAME_ALREADY_EXISTS("ERR-PA42202", 422,
       "The requested username already exists"),
-  EMAIL_ALREADY_EXISTS("ERR-PA42202", 422,
+  EMAIL_ALREADY_EXISTS("ERR-PA42203", 422,
       "The requested email already exists"),
+  FILE_ALREADY_EXISTS("ERR-PA42204", 422,
+      "The requested file already exists"),
 
   UNSPECIFIED_ERROR("ERR-PA50001", 500,
       "Unspecified error that is not handled by generid handler"),

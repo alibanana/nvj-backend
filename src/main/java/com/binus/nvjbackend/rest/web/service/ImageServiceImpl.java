@@ -33,14 +33,10 @@ public class ImageServiceImpl implements ImageService {
   public Image uploadImage(MultipartFile file) {
     String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
     validateFileTypeFromFileName(filename);
-    try {
-      return fileStorageService.storeFiles(file).stream()
-          .map(this::validateAndStoreImageToMongo)
-          .collect(Collectors.toList())
-          .get(0);
-    } catch (Exception e) {
-      throw new BaseException(ErrorCode.FAILED_STORING_FILE);
-    }
+    return fileStorageService.storeFiles(file).stream()
+        .map(this::validateAndStoreImageToMongo)
+        .collect(Collectors.toList())
+        .get(0);
   }
 
   @Override
