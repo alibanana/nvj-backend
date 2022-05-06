@@ -24,6 +24,6 @@ public class SysparamProperties {
   @Value("${sysparam.file.upload-dir}")
   private String fileStorageLocation;
 
-  @Value("${sysparam.nginx.file-url}")
-  private String nginxFileUrl;
+  @Value("${sysparam.file.retrieve-url}")
+  private String fileRetrieveUrl;
 }

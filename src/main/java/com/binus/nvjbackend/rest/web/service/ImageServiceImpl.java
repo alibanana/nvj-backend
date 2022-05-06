@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.net.URLConnection;
 import java.nio.file.Path;
 import java.util.Objects;
@@ -42,6 +43,13 @@ public class ImageServiceImpl implements ImageService {
     }
   }
 
+  @Override
+  public byte[] retrieveImage(String filename) throws IOException {
+    validateFileTypeFromFileName(filename);
+    fileStorageService.validateFileExistsByFilename(filename);
+    return fileStorageService.retrieveFile(filename);
+  }
+
   private void validateFileTypeFromFileName(String filename) {
     String mimetype = URLConnection.guessContentTypeFromName(filename);
     if (!mimetype.equals(FileTypes.IMAGE_PNG.getType()) &&
@@ -53,7 +61,7 @@ public class ImageServiceImpl implements ImageService {
   private Image validateAndStoreImageToMongo(Path path) {
       String name = path.getFileName().toString();
       fileStorageService.validateFileExistsByFilename(name);
-      String url = sysparamProperties.getNginxFileUrl() + name;
+      String url = sysparamProperties.getFileRetrieveUrl() + name;
       return storeImageToMongo(name.substring(0, name.lastIndexOf('.')), url);
   }
 

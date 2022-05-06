@@ -60,6 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers(SWAGGER_URLS).permitAll()
         .antMatchers("/api/auth/**").permitAll()
         .antMatchers("/api/test/**").permitAll()
+        .antMatchers("/api/images/*.jpg", "/api/images/*.jpeg", "/api/images/*.png").permitAll()
         .anyRequest().authenticated();
 
     http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);

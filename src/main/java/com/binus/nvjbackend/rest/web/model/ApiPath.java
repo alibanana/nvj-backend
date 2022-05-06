@@ -12,7 +12,7 @@ public class ApiPath {
 
   public static final String LOGOUT = "/logout";
 
-  public static final String BASE_PATH_SYSTEM_PARAMETER = BASE_PATH_API + "/systemparameter";
+  public static final String BASE_PATH_SYSTEM_PARAMETER = BASE_PATH_API + "/systemparameters";
 
   public static final String SYSTEM_PARAMETER_INSERT = "/insert";
 
@@ -22,7 +22,7 @@ public class ApiPath {
 
   public static final String SYSTEM_PARAMETER_DELETE_BY_KEY = "/deleteByKey";
 
-  public static final String BASE_PATH_IMAGE = BASE_PATH_API + "/image";
+  public static final String BASE_PATH_IMAGE = BASE_PATH_API + "/images";
 
   public static final String UPLOAD_IMAGE = "/upload";
 }

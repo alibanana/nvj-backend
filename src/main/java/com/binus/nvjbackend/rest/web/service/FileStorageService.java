@@ -10,4 +10,6 @@ public interface FileStorageService {
   List<Path> storeFiles(MultipartFile... files);
 
   void validateFileExistsByFilename(String filename);
+
+  byte[] retrieveFile(String filename);
 }

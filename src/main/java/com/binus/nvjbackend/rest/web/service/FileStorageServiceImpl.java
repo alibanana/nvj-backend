@@ -3,12 +3,14 @@ package com.binus.nvjbackend.rest.web.service;
 import com.binus.nvjbackend.config.properties.SysparamProperties;
 import com.binus.nvjbackend.model.enums.ErrorCode;
 import com.binus.nvjbackend.model.exception.BaseException;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -46,6 +48,25 @@ public class FileStorageServiceImpl implements FileStorageService {
         .collect(Collectors.toList());
   }
 
+  @Override
+  public byte[] retrieveFile(String filename) {
+    try {
+      return FileUtils.readFileToByteArray(
+          new File(sysparamProperties.getFileStorageLocation() + filename));
+    } catch (IOException e) {
+      throw new BaseException(ErrorCode.FILE_NOT_FOUND_OR_UNREADABLE);
+    }
+  }
+
+  @Override
+  public void validateFileExistsByFilename(String filename) {
+    try {
+      rootDir.resolve(filename);
+    } catch (Exception e) {
+      throw new BaseException(ErrorCode.FILE_NOT_FOUND_OR_UNREADABLE);
+    }
+  }
+
   private void validateFilesNotEmpty(MultipartFile... files) {
     if (files.length == 0) {
       throw new BaseException(ErrorCode.INVALID_REQUEST_PAYLOAD);
@@ -69,6 +90,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 
   private Path storeFile(MultipartFile file, String filename) {
     try (InputStream inputStream = file.getInputStream()) {
+      createDirectoriesIfNotExists(rootDir);
       Files.copy(inputStream, rootDir.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
       return rootDir.resolve(filename);
     } catch (IOException e) {
@@ -76,12 +98,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
   }
 
-  @Override
-  public void validateFileExistsByFilename(String filename) {
-    try {
-      rootDir.resolve(filename);
-    } catch (Exception e) {
-      throw new BaseException(ErrorCode.FILE_NOT_FOUND_OR_UNREADABLE);
-    }
+  private void createDirectoriesIfNotExists(Path directory) throws IOException {
+    if (Files.notExists(rootDir)) Files.createDirectories(rootDir);
   }
 }
