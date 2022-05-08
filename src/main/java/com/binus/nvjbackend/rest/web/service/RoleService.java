@@ -1,7 +1,6 @@
 package com.binus.nvjbackend.rest.web.service;
 
 import com.binus.nvjbackend.model.entity.Role;
-import com.binus.nvjbackend.rest.web.model.request.role.RoleNameRequest;
 import com.binus.nvjbackend.rest.web.model.request.role.RoleRequest;
 
 import java.util.List;
