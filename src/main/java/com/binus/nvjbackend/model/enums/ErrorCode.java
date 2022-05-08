@@ -33,6 +33,8 @@ public enum ErrorCode {
       "The requested email already exists"),
   FILE_ALREADY_EXISTS("ERR-PA42205", 422,
       "The requested file already exists"),
+  TICKET_ALREADY_EXISTS("ERR-PA42206", 422,
+      "The requested ticket already exists"),
 
   UNSPECIFIED_ERROR("ERR-PA50001", 500,
       "Unspecified error that is not handled by generid handler"),

@@ -35,4 +35,8 @@ public class ApiPath {
   public static final String BASE_PATH_IMAGE = BASE_PATH_API + "/images";
 
   public static final String UPLOAD_IMAGE = "/upload";
+
+  public static final String BASE_PATH_TICKET = BASE_PATH_API + "/tickets";
+
+  public static final String TICKET_CREATE = "/create";
 }
