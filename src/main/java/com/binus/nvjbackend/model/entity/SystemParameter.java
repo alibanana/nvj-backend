@@ -34,10 +34,4 @@ public class SystemParameter extends BaseMongoEntity {
     this.description = description;
     this.type = type;
   }
-
-  @Override
-  public String toString() {
-    return String.format("SystemParameter [key=%s, value=%s, description=%s, type=%s, toString()=%s]",
-        this.key, this.value, this.description, this.type, super.toString());
-  }
 }

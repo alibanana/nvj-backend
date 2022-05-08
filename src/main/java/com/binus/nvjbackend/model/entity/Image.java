@@ -29,10 +29,4 @@ public class Image extends BaseMongoEntity {
     this.name = name;
     this.url = url;
   }
-
-  @Override
-  public String toString() {
-    return String.format("Image [name=%s, url=%s, toString()=%s]",
-        this.name, this.url, super.toString());
-  }
 }

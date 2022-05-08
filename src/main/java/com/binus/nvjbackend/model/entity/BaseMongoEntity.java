@@ -34,14 +34,4 @@ public abstract class BaseMongoEntity implements Serializable {
 
   @Field(value = BaseMongoEntity.UPDATED_AT)
   private Date updatedAt;
-
-  @Override
-  public String toString() {
-    final StringBuilder sb = new StringBuilder("BaseMongoEntity{");
-    sb.append("id='").append(id).append('\'');
-    sb.append(", createdAt=").append(createdAt);
-    sb.append(", updatedAt=").append(updatedAt);
-    sb.append('}');
-    return sb.toString();
-  }
 }

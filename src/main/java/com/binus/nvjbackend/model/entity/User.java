@@ -1,5 +1,6 @@
 package com.binus.nvjbackend.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Document(collection = User.COLLECTION_NAME)
 public class User extends BaseMongoEntity {
 
@@ -25,17 +27,14 @@ public class User extends BaseMongoEntity {
   private String email;
   private String password;
 
+  private Role role;
+
   public User(String id, Date createdAt, Date updatedAt, String username, String email,
-      String password) {
+      String password, Role role) {
     super(id, createdAt, updatedAt);
     this.username = username;
     this.email = email;
     this.password = password;
-  }
-
-  @Override
-  public String toString() {
-    return String.format("User [username=%s, email=%s, password=%s, toString()=%s]",
-        this.username, this.email, this.password, super.toString());
+    this.role = role;
   }
 }

@@ -2,7 +2,9 @@ package com.binus.nvjbackend.model.enums;
 
 public enum ErrorCode {
 
-  SYSPARAM_KEY_NOT_FOUND("ERR-PA40001", 400,
+  ROLE_NOT_FOUND("ERR-PA40001", 400,
+      "The requested role doesn't exists"),
+  SYSPARAM_KEY_NOT_FOUND("ERR-PA40002", 400,
       "System parameter with the requested key doesn't exists"),
 
   USER_CREDENTIALS_INVALID("ERR-PA40101", 401,
@@ -10,22 +12,26 @@ public enum ErrorCode {
 
   INVALID_REQUEST_PAYLOAD("ERR-PA40401", 404,
       "Requested payload is invalid"),
-  SYSPARAM_TYPE_INVALID("ERR-PA40402", 404,
+  ROLE_TYPE_INVALID("ERR-PA40402", 404,
+      "The only allowed role type are [ADMIN, MANAGER, EMPLOYEE]"),
+  SYSPARAM_TYPE_INVALID("ERR-PA40403", 404,
       "The only allowed system parameter type are [STRING, INTEGER, ARRAY_STRING]"),
-  FILE_IS_EMPTY("ERR-PA40403", 404,
+  FILE_IS_EMPTY("ERR-PA40404", 404,
       "Failed to store empty file"),
-  FILENAME_INVALID("ERR-PA40404", 404,
+  FILENAME_INVALID("ERR-PA40405", 404,
       "Cannot store file with relative path outside current directory"),
-  FILETYPE_MUST_BE_IMAGE("ERR-PA40405", 404,
+  FILETYPE_MUST_BE_IMAGE("ERR-PA40406", 404,
       "Only images (png, jpeg/jpg) are allowed, please double check the filetype"),
 
-  SYSPARAM_KEY_ALREADY_EXISTS("ERR-PA42201", 422,
+  ROLENAME_ALREADY_EXISTS("ERR-PA42201", 422,
+      "Role with the requested name and roleType already exists"),
+  SYSPARAM_KEY_ALREADY_EXISTS("ERR-PA42202", 422,
       "System parameter with the requested key already exists"),
-  USERNAME_ALREADY_EXISTS("ERR-PA42202", 422,
+  USERNAME_ALREADY_EXISTS("ERR-PA42203", 422,
       "The requested username already exists"),
-  EMAIL_ALREADY_EXISTS("ERR-PA42203", 422,
+  EMAIL_ALREADY_EXISTS("ERR-PA42204", 422,
       "The requested email already exists"),
-  FILE_ALREADY_EXISTS("ERR-PA42204", 422,
+  FILE_ALREADY_EXISTS("ERR-PA42205", 422,
       "The requested file already exists"),
 
   UNSPECIFIED_ERROR("ERR-PA50001", 500,

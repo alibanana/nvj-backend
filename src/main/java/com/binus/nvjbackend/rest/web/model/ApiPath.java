@@ -4,6 +4,16 @@ public class ApiPath {
 
   public static final String BASE_PATH_API = "/api";
 
+  public static final String BASE_PATH_ROLE = BASE_PATH_API + "/roles";
+
+  public static final String ROLE_INSERT = "/insert";
+
+  public static final String ROLE_FIND_BY_NAME = "/findByName";
+
+  public static final String ROLE_UPDATE_BY_ROLETYPE = "/updateByRoleType";
+
+  public static final String ROLE_DELETE_BY_NAME = "/deleteByName";
+
   public static final String BASE_PATH_AUTHENTICATION = BASE_PATH_API + "/auth";
 
   public static final String LOGIN = "/login";
