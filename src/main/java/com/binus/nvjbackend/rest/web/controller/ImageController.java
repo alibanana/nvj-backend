@@ -37,7 +37,7 @@ public class ImageController extends BaseController {
         .build());
   }
 
-  @GetMapping(value = "/{filename}")
+  @GetMapping(value = ApiPath.GET_IMAGE_BY_FILENAME)
   public ResponseEntity<byte[]> getImage(@PathVariable("filename") String filename)
       throws IOException {
     byte[] image = imageService.retrieveImage(filename);
