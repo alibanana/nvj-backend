@@ -50,9 +50,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 
   @Override
   public void validateFileExistsByFilename(String filename) {
-    try {
-      rootDir.resolve(filename);
-    } catch (Exception e) {
+    if (Files.notExists(Paths.get(sysparamProperties.getFileStorageLocation() + filename))) {
       throw new BaseException(ErrorCode.FILE_NOT_FOUND_OR_UNREADABLE);
     }
   }
@@ -64,6 +62,14 @@ public class FileStorageServiceImpl implements FileStorageService {
           new File(sysparamProperties.getFileStorageLocation() + filename));
     } catch (IOException e) {
       throw new BaseException(ErrorCode.FILE_NOT_FOUND_OR_UNREADABLE);
+    }
+  }
+
+  @Override
+  public void removeFile(String filename) {
+    File file = new File(sysparamProperties.getFileStorageLocation() + filename);
+    if(!file.delete()) {
+      throw new BaseException(ErrorCode.FILE_DELETION_FAILED);
     }
   }
 

@@ -12,4 +12,6 @@ public interface FileStorageService {
   void validateFileExistsByFilename(String filename);
 
   byte[] retrieveFile(String filename);
+
+  void removeFile(String filename);
 }

@@ -3,12 +3,14 @@ package com.binus.nvjbackend.rest.web.controller;
 import com.binus.nvjbackend.model.entity.Image;
 import com.binus.nvjbackend.rest.web.model.ApiPath;
 import com.binus.nvjbackend.rest.web.model.response.ImageResponse;
+import com.binus.nvjbackend.rest.web.model.response.rest.RestBaseResponse;
 import com.binus.nvjbackend.rest.web.model.response.rest.RestSingleResponse;
 import com.binus.nvjbackend.rest.web.service.ImageService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,6 +46,12 @@ public class ImageController extends BaseController {
     return ResponseEntity.ok()
         .contentType(MediaType.parseMediaType(getFileTypeFromFileName(filename)))
         .body(image);
+  }
+
+  @DeleteMapping(value = ApiPath.DELETE_IMAGE_BY_FILENAME)
+  public RestBaseResponse deleteImage(@PathVariable("filename") String filename) {
+    imageService.deleteImage(filename);
+    return toBaseResponse();
   }
 
   private String getFileTypeFromFileName(String filename) {

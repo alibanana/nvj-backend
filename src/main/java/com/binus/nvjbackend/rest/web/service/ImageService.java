@@ -10,4 +10,6 @@ public interface ImageService {
   Image uploadImage(MultipartFile file);
 
   byte[] retrieveImage(String filename) throws IOException;
+
+  void deleteImage(String filename);
 }

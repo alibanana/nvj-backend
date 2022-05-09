@@ -46,6 +46,13 @@ public class ImageServiceImpl implements ImageService {
     return fileStorageService.retrieveFile(filename);
   }
 
+  @Override
+  public void deleteImage(String filename) {
+    fileStorageService.validateFileExistsByFilename(filename);
+    fileStorageService.removeFile(filename);
+    imageRepository.deleteByName(filename);
+  }
+
   private void validateFileTypeFromFileName(String filename) {
     String mimetype = URLConnection.guessContentTypeFromName(filename);
     if (!mimetype.equals(FileTypes.IMAGE_PNG.getType()) &&
@@ -58,7 +65,7 @@ public class ImageServiceImpl implements ImageService {
       String name = path.getFileName().toString();
       fileStorageService.validateFileExistsByFilename(name);
       String url = sysparamProperties.getFileRetrieveUrl() + name;
-      return storeImageToMongo(name.substring(0, name.lastIndexOf('.')), url);
+      return storeImageToMongo(name, url);
   }
 
 

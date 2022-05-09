@@ -6,7 +6,7 @@ import com.binus.nvjbackend.model.exception.BaseException;
 import com.binus.nvjbackend.repository.UserRepository;
 import com.binus.nvjbackend.rest.web.model.request.authentication.LoginRequest;
 import com.binus.nvjbackend.rest.web.model.request.authentication.RegisterRequest;
-import com.binus.nvjbackend.rest.web.util.JwtUtil;
+import com.binus.nvjbackend.rest.web.util.RoleUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -30,6 +30,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   @Autowired
   private PasswordEncoder encoder;
 
+  @Autowired
+  private RoleUtil roleUtil;
+
   @Override
   public UserDetails login(LoginRequest loginRequest) {
     try {
@@ -50,6 +53,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     } else if (userRepository.existsByEmail(registerRequest.getEmail())) {
       throw new BaseException(ErrorCode.EMAIL_ALREADY_EXISTS);
     }
+
+    roleUtil.validateRoleType(registerRequest.getRoleType());
 
     User user = User.builder()
         .username(registerRequest.getUsername())

@@ -26,4 +26,7 @@ public class RegisterRequest implements Serializable {
 
   @NotBlank
   private String password;
+
+  @NotBlank
+  private String roleType;
 }

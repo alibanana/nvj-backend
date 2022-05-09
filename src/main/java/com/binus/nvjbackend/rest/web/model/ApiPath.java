@@ -38,6 +38,8 @@ public class ApiPath {
 
   public static final String GET_IMAGE_BY_FILENAME = "/{filename}";
 
+  public static final String DELETE_IMAGE_BY_FILENAME = "/{filename}";
+
   public static final String BASE_PATH_TICKET = BASE_PATH_API + "/tickets";
 
   public static final String TICKET_CREATE = "/create";
