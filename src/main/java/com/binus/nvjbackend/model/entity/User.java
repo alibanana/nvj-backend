@@ -24,6 +24,7 @@ public class User extends BaseMongoEntity {
 
   private static final long serialVersionUID = 3161008033335897044L;
 
+  private String fullname;
   private String username;
   private String email;
   private String password;

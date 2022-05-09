@@ -19,6 +19,9 @@ public class RegisterRequest implements Serializable {
   private static final long serialVersionUID = 4351953499150532640L;
 
   @NotBlank
+  private String fullname;
+
+  @NotBlank
   private String username;
 
   @NotBlank
