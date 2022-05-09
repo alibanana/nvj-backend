@@ -26,4 +26,10 @@ public class SysparamProperties {
 
   @Value("${sysparam.file.retrieve-url}")
   private String fileRetrieveUrl;
+
+  @Value("${sysparam.qrcode.default-width}")
+  private int qrCodeDefaultWidth;
+
+  @Value("${sysparam.qrcode.default-height}")
+  private int qrCodeDefaultHeight;
 }

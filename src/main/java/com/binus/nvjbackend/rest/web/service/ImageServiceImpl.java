@@ -53,6 +53,14 @@ public class ImageServiceImpl implements ImageService {
     imageRepository.deleteByName(filename);
   }
 
+  @Override
+  public Image validateAndStoreImageToMongo(Path path) {
+    String name = path.getFileName().toString();
+    fileStorageService.validateFileExistsByFilename(name);
+    String url = sysparamProperties.getFileRetrieveUrl() + name;
+    return storeImageToMongo(name, url);
+  }
+
   private void validateFileTypeFromFileName(String filename) {
     String mimetype = URLConnection.guessContentTypeFromName(filename);
     if (!mimetype.equals(FileTypes.IMAGE_PNG.getType()) &&
@@ -60,14 +68,6 @@ public class ImageServiceImpl implements ImageService {
       throw new BaseException(ErrorCode.FILETYPE_MUST_BE_IMAGE);
     }
   }
-
-  private Image validateAndStoreImageToMongo(Path path) {
-      String name = path.getFileName().toString();
-      fileStorageService.validateFileExistsByFilename(name);
-      String url = sysparamProperties.getFileRetrieveUrl() + name;
-      return storeImageToMongo(name, url);
-  }
-
 
   private Image storeImageToMongo(String filename, String url) {
     try {

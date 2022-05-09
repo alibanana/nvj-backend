@@ -9,6 +9,7 @@ import com.binus.nvjbackend.rest.web.model.response.rest.RestSingleResponse;
 import com.binus.nvjbackend.rest.web.service.AuthenticationService;
 import com.binus.nvjbackend.rest.web.service.UserDetailsImpl;
 import com.binus.nvjbackend.rest.web.util.JwtUtil;
+import com.google.zxing.WriterException;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Api(value = "Authentication", description = "Authentication Service API")
 @RestController
@@ -52,7 +54,8 @@ public class AuthenticationController extends BaseController {
   }
 
   @PostMapping(value = ApiPath.REGISTER)
-  public RestBaseResponse register(@Valid @RequestBody RegisterRequest request) {
+  public RestBaseResponse register(@Valid @RequestBody RegisterRequest request)
+      throws IOException, WriterException {
     authenticationService.register(request);
     return toBaseResponse();
   }

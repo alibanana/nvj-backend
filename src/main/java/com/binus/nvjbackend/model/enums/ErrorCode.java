@@ -24,6 +24,8 @@ public enum ErrorCode {
 
   FILE_NOT_FOUND_OR_UNREADABLE("ERR-PA40401", 404,
       "File not found or is un-readable"),
+  QR_CODE_NOT_FOUND_OR_UNREADABLE("ERR-PA40402", 404,
+      "QRCode not found or is un-readable"),
 
   FILE_DELETION_FAILED("ERR-PA40901", 409,
       "The requested file cannot be deleted"),

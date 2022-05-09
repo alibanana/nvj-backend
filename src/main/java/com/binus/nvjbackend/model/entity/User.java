@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
@@ -27,14 +28,19 @@ public class User extends BaseMongoEntity {
   private String email;
   private String password;
 
+  @DBRef
   private Role role;
 
+  @DBRef
+  private Image qrCodeImage;
+
   public User(String id, Date createdAt, Date updatedAt, String username, String email,
-      String password, Role role) {
+      String password, Role role, Image qrCodeImage) {
     super(id, createdAt, updatedAt);
     this.username = username;
     this.email = email;
     this.password = password;
     this.role = role;
+    this.qrCodeImage = qrCodeImage;
   }
 }
