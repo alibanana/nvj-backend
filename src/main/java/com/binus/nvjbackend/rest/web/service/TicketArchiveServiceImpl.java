@@ -14,9 +14,10 @@ public class TicketArchiveServiceImpl implements TicketArchiveService {
   private TicketArchiveRepository ticketArchiveRepository;
 
   @Override
-  public TicketArchive createAndReturnTicketArchive(TicketRequest request) {
+  public TicketArchive createAndReturnTicketArchive(TicketRequest request, int version) {
     TicketArchive ticketArchive = new TicketArchive();
     BeanUtils.copyProperties(request, ticketArchive);
+    ticketArchive.setVersion(version);
     return ticketArchiveRepository.save(ticketArchive);
   }
 }

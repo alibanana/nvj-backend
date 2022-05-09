@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Objects;
 
 @Service
 public class TicketServiceImpl implements TicketService {
@@ -22,10 +23,19 @@ public class TicketServiceImpl implements TicketService {
   private TicketRepository ticketRepository;
 
   @Override
-  public void create(TicketRequest request) {
+  public Ticket create(TicketRequest request) {
     validateTicketDoesNotExistsByTitle(request.getTitle());
-    TicketArchive ticketArchive = ticketArchiveService.createAndReturnTicketArchive(request);
-    ticketRepository.save(initializeNewTicket(ticketArchive));
+    TicketArchive ticketArchive = ticketArchiveService.createAndReturnTicketArchive(request, 0);
+    return ticketRepository.save(initializeNewTicket(ticketArchive));
+  }
+
+  @Override
+  public Ticket updateByTitle(TicketRequest request) {
+    Ticket ticket = ticketRepository.findByTitle(request.getTitle());
+    if (Objects.isNull(ticket)) {
+      throw new BaseException(ErrorCode.TICKET_NOT_FOUND);
+    }
+    return updateTicketAndTicketArchives(ticket, request);
   }
 
   private void validateTicketDoesNotExistsByTitle(String title) {
@@ -40,5 +50,14 @@ public class TicketServiceImpl implements TicketService {
     ticket.setVersion(null); // let version be handled by springboot.
     ticket.setTicketArchives(Collections.singletonList(ticketArchive));
     return ticket;
+  }
+
+  private Ticket updateTicketAndTicketArchives(Ticket ticket, TicketRequest request) {
+    ticket.setDescription(request.getDescription());
+    ticket.setPrice(request.getPrice());
+    TicketArchive ticketArchive = ticketArchiveService.createAndReturnTicketArchive(request,
+        ticket.getVersion() + 1);
+    ticket.getTicketArchives().add(ticketArchive);
+    return ticketRepository.save(ticket);
   }
 }

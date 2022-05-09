@@ -1,4 +1,4 @@
-package com.binus.nvjbackend.rest.web.model.request.ticket;
+package com.binus.nvjbackend.rest.web.model.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Data
@@ -15,18 +13,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TicketRequest implements Serializable {
+public class TicketResponse implements Serializable {
 
-  private static final long serialVersionUID = -7921030218064858280L;
+  private static final long serialVersionUID = 323216749474566852L;
 
-  @NotBlank
   private String title;
-
-  @NotBlank
   private String description;
-
-  @NotNull
   private Integer price;
-
-  private boolean markForDelete;
 }

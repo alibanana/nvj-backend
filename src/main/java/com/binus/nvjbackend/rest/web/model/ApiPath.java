@@ -43,4 +43,6 @@ public class ApiPath {
   public static final String BASE_PATH_TICKET = BASE_PATH_API + "/tickets";
 
   public static final String TICKET_CREATE = "/create";
+
+  public static final String TICKET_UPDATE_BY_TITLE = "/updateByTitle";
 }

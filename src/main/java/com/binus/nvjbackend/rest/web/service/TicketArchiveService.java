@@ -5,5 +5,5 @@ import com.binus.nvjbackend.rest.web.model.request.ticket.TicketRequest;
 
 public interface TicketArchiveService {
 
-  TicketArchive createAndReturnTicketArchive(TicketRequest request);
+  TicketArchive createAndReturnTicketArchive(TicketRequest request, int version);
 }
