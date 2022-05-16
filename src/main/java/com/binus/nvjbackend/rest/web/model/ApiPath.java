@@ -40,6 +40,20 @@ public class ApiPath {
 
   public static final String DELETE_IMAGE_BY_FILENAME = "/{filename}";
 
+  public static final String BASE_PATH_EMAIL_TEMPLATE = BASE_PATH_API + "/email-templates";
+
+  public static final String EMAIL_TEMPLATE_CREATE = "/create";
+
+  public static final String EMAIL_TEMPLATE_FIND_BY_TEMPLATE_NAME = "/{templateName}";
+
+  public static final String EMAIL_TEMPLATE_CHECK_BY_TEMPLATE_NAME = "/{templateName}/check";
+
+  public static final String EMAIL_TEMPLATE_UPDATE_BY_TEMPLATE_NAME = "/updateByTemplateName";
+
+  public static final String EMAIL_TEMPLATE_SEND = "/send";
+
+  public static final String EMAIL_TEMPLATE_DELETE_BY_TEMPLATE_NAME = "/{templateName}";
+
   public static final String BASE_PATH_TICKET = BASE_PATH_API + "/tickets";
 
   public static final String TICKET_CREATE = "/create";
