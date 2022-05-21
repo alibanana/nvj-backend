@@ -58,5 +58,7 @@ public class ApiPath {
 
   public static final String TICKET_CREATE = "/create";
 
+  public static final String TICKET_FIND_BY_FILTER = "/findByFilter";
+
   public static final String TICKET_UPDATE_BY_TITLE = "/updateByTitle";
 }

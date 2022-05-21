@@ -16,6 +16,12 @@ public enum ErrorCode {
       "Only images (png, jpeg/jpg) are allowed, please double check the filetype"),
   EMAIL_TEMPLATE_KEY_VALUES_MISSING("ERR-PA40007", 400,
       "Some key & value pairs are missing for the requested email template"),
+  PAGE_NUMBER_LESS_THAN_ZERO("ERR-40008", 400,
+      "Page number must not be less than zero"),
+  PAGE_SIZE_LESS_THAN_OR_EQUAL_TO_ZERO("ERR-40009", 400,
+      "Page size must be greater than zero"),
+  SORT_BY_VALUES_INVALID("ERR-40010", 400,
+      "The only allowed sortBy values are [ASC, DESC]"),
 
   USER_CREDENTIALS_INVALID("ERR-PA40101", 401,
       "The requested username and password is invalid"),
