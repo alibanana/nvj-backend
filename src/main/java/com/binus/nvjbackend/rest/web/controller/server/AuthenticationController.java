@@ -1,5 +1,6 @@
-package com.binus.nvjbackend.rest.web.controller;
+package com.binus.nvjbackend.rest.web.controller.server;
 
+import com.binus.nvjbackend.rest.web.controller.BaseController;
 import com.binus.nvjbackend.rest.web.model.ApiPath;
 import com.binus.nvjbackend.rest.web.model.request.authentication.LoginRequest;
 import com.binus.nvjbackend.rest.web.model.request.authentication.RegisterRequest;

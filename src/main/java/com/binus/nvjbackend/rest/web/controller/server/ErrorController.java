@@ -1,4 +1,4 @@
-package com.binus.nvjbackend.rest.web.controller;
+package com.binus.nvjbackend.rest.web.controller.server;
 
 import com.binus.nvjbackend.model.dto.ErrorFieldAndMessageDto;
 import com.binus.nvjbackend.model.enums.ErrorCode;

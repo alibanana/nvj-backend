@@ -13,12 +13,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TicketResponse implements Serializable {
+public class TicketClientResponse implements Serializable {
 
-  private static final long serialVersionUID = 323216749474566852L;
+  private static final long serialVersionUID = 6430846672835846026L;
 
   private String id;
   private String title;
-  private String description;
   private Integer price;
 }

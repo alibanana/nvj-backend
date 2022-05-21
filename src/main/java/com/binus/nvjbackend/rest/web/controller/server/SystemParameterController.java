@@ -1,6 +1,7 @@
-package com.binus.nvjbackend.rest.web.controller;
+package com.binus.nvjbackend.rest.web.controller.server;
 
 import com.binus.nvjbackend.model.entity.SystemParameter;
+import com.binus.nvjbackend.rest.web.controller.BaseController;
 import com.binus.nvjbackend.rest.web.model.ApiPath;
 import com.binus.nvjbackend.rest.web.model.request.systemparameter.SystemParameterKeyRequest;
 import com.binus.nvjbackend.rest.web.model.request.systemparameter.SystemParameterRequest;

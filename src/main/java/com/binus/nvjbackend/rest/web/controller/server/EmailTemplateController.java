@@ -1,6 +1,7 @@
-package com.binus.nvjbackend.rest.web.controller;
+package com.binus.nvjbackend.rest.web.controller.server;
 
 import com.binus.nvjbackend.model.entity.EmailTemplate;
+import com.binus.nvjbackend.rest.web.controller.BaseController;
 import com.binus.nvjbackend.rest.web.model.ApiPath;
 import com.binus.nvjbackend.rest.web.model.request.emailtemplate.EmailTemplateRequest;
 import com.binus.nvjbackend.rest.web.model.request.emailtemplate.EmailTemplateSendRequest;
