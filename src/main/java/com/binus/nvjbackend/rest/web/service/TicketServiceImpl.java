@@ -14,7 +14,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
@@ -42,6 +44,16 @@ public class TicketServiceImpl implements TicketService {
     PageRequest pageRequest = validateAndGetPageRequest(page, size, orderBy, sortBy);
     return ticketRepository.findAllByTitleAndPriceBetween(request.getTitle(),
         request.getFromPrice(), request.getToPrice(), pageRequest);
+  }
+
+  @Override
+  public List<Ticket> findByIds(List<String> ids) {
+    List<Ticket> tickets = new ArrayList<>();
+    ticketRepository.findAllById(ids).forEach(tickets::add);
+    if (tickets.isEmpty()) {
+      throw new BaseException(ErrorCode.TICKET_NOT_FOUND);
+    }
+    return tickets;
   }
 
   @Override
