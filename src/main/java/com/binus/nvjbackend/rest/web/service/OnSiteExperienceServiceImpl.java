@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,6 +36,17 @@ public class OnSiteExperienceServiceImpl implements OnSiteExperienceService {
   @Override
   public List<OnSiteExperience> findAll() {
     return onSiteExperienceRepository.findAll();
+  }
+
+  @Override
+  public OnSiteExperience findById(String id) {
+    OnSiteExperience onSiteExperience = Optional.of(onSiteExperienceRepository.findById(id))
+        .get()
+        .orElse(null);
+    if (Objects.isNull(onSiteExperience)) {
+      throw new BaseException(ErrorCode.ON_SITE_EXPERIENCE_NOT_FOUND);
+    }
+    return onSiteExperience;
   }
 
   private void validateOnSiteExperienceDoesNotExistsByTitle(String title) {

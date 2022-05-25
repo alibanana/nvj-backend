@@ -36,6 +36,8 @@ public enum ErrorCode {
       "The requested ticket does not exists"),
   EMAIL_TEMPLATE_NAME_NOT_FOUND("ERR-PA40405", 404,
       "Email template with the requested template name doesn't exists"),
+  ON_SITE_EXPERIENCE_NOT_FOUND("ERR-PA40406", 404,
+      "The requested on-site experience does not exists"),
 
   FILE_DELETION_FAILED("ERR-PA40901", 409,
       "The requested file cannot be deleted"),

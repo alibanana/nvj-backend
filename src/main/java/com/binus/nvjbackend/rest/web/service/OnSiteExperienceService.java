@@ -10,4 +10,6 @@ public interface OnSiteExperienceService {
   OnSiteExperience create(OnSiteExperienceRequest request);
 
   List<OnSiteExperience> findAll();
+
+  OnSiteExperience findById(String id);
 }
