@@ -56,6 +56,8 @@ public enum ErrorCode {
       "The requested ticket already exists"),
   EMAIL_TEMPLATE_EXISTS("ERR-PA42208", 422,
       "The requested template name already exists"),
+  ON_SITE_EXPERIENCE_EXISTS("ERR-PA42209", 422,
+      "The requested on-site experience title already exists"),
 
   UNSPECIFIED_ERROR("ERR-PA50001", 500,
       "Unspecified error that is not handled by generid handler"),
@@ -63,8 +65,10 @@ public enum ErrorCode {
       "Could not initialize storage directory"),
   FAILED_STORING_FILE("ERR-PA50003", 500,
       "Failed to store file"),
-  FAILED_STORING_IMAGE("ERR-PA50005", 500,
-      "Failed to store image to database");
+  FAILED_STORING_IMAGE("ERR-PA50004", 500,
+      "Failed to store image to database"),
+  MAX_UPLOAD_SIZE_EXCEEDED("ERR-PA50005", 500,
+      "Request failed due to max upload size exceeded");
 
   private final String errorCode;
   private final int httpStatus;

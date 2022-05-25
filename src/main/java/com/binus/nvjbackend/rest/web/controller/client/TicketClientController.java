@@ -2,7 +2,6 @@ package com.binus.nvjbackend.rest.web.controller.client;
 
 import com.binus.nvjbackend.model.entity.Ticket;
 import com.binus.nvjbackend.rest.web.controller.BaseController;
-import com.binus.nvjbackend.rest.web.model.ApiPath;
 import com.binus.nvjbackend.rest.web.model.ApiPathClient;
 import com.binus.nvjbackend.rest.web.model.request.ticket.TicketFilterRequest;
 import com.binus.nvjbackend.rest.web.model.response.TicketClientResponse;
@@ -29,19 +28,19 @@ public class TicketClientController extends BaseController {
   @Autowired
   private TicketService ticketService;
 
-  @PostMapping(value = ApiPath.TICKET_FIND_BY_FILTER)
+  @PostMapping(value = ApiPathClient.TICKET_FIND_BY_FILTER)
   public RestPageResponse<TicketClientResponse> findByFilter(@RequestParam(required = false) Integer page,
       @RequestParam(required = false) Integer size, @RequestParam(required = false) String orderBy,
       @RequestParam(required = false) String sortBy,
       @Valid @RequestBody TicketFilterRequest request) {
     Page<Ticket> tickets = ticketService.findByFilter(page, size, orderBy, sortBy, request);
     List<TicketClientResponse> content = tickets.getContent().stream()
-        .map(this::toTicketResponse)
+        .map(this::toTicketClientResponse)
         .collect(Collectors.toList());
     return toPageResponse(content, tickets);
   }
 
-  private TicketClientResponse toTicketResponse(Ticket ticket) {
+  private TicketClientResponse toTicketClientResponse(Ticket ticket) {
     return TicketClientResponse.builder()
         .id(ticket.getId())
         .title(ticket.getTitle())

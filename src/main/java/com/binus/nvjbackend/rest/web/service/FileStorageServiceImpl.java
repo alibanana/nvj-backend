@@ -83,7 +83,6 @@ public class FileStorageServiceImpl implements FileStorageService {
     String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
     validateFileNotEmpty(file);
     validateFileName(filename);
-    validateFileDoesntExists(filename);
     return storeFile(file, filename);
   }
 
@@ -93,11 +92,6 @@ public class FileStorageServiceImpl implements FileStorageService {
 
   private void validateFileName(String filename) {
     if (filename.contains("..")) throw new BaseException(ErrorCode.FILENAME_INVALID);
-  }
-
-  private void validateFileDoesntExists(String filename) {
-    if (Files.exists(Paths.get(sysparamProperties.getFileStorageLocation() + filename)))
-      throw new BaseException(ErrorCode.FILE_ALREADY_EXISTS);
   }
 
   private Path storeFile(MultipartFile file, String filename) {

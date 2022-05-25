@@ -71,11 +71,13 @@ public class ImageServiceImpl implements ImageService {
 
   private Image storeImageToMongo(String filename, String url) {
     try {
-      return imageRepository.save(
-          Image.builder()
-              .name(filename)
-              .url(url)
-              .build());
+      Image image = imageRepository.findByName(filename);
+      return Objects.nonNull(image) ? image :
+          imageRepository.save(
+              Image.builder()
+                  .name(filename)
+                  .url(url)
+                  .build());
     } catch (Exception e) {
       throw new BaseException(ErrorCode.FAILED_STORING_IMAGE);
     }

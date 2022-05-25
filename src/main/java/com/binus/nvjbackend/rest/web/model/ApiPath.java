@@ -61,4 +61,8 @@ public class ApiPath {
   public static final String TICKET_FIND_BY_FILTER = "/findByFilter";
 
   public static final String TICKET_UPDATE_BY_TITLE = "/updateByTitle";
+
+  public static final String BASE_PATH_EXPERIENCE = BASE_PATH_API + "/experiences";
+
+  public static final String EXPERIENCE_CREATE = "/create";
 }

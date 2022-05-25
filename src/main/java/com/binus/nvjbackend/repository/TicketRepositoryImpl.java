@@ -22,11 +22,18 @@ public class TicketRepositoryImpl implements TicketRepositoryCustom {
   @Override
   public Page<Ticket> findAllByTitleAndPriceBetween(String title, Integer fromPrice,
       Integer toPrice, PageRequest pageRequest) {
-    Query query = new Query(where(MongoFieldNames.TICKET_PRICE).gte(fromPrice).lte(toPrice));
+    Query query = new Query();
+
+    if (Objects.nonNull(fromPrice) && Objects.nonNull(toPrice)) {
+      query.addCriteria(where(MongoFieldNames.TICKET_PRICE)
+          .gte(fromPrice).lte(toPrice));
+    }
+
     if (Objects.nonNull(title)) {
       query.addCriteria(where(MongoFieldNames.TICKET_TITLE)
           .regex(String.format(".*%s.*", title), "i"));
     }
+
     query.with(pageRequest);
     List<Ticket> ticketList = mongoTemplate.find(query, Ticket.class);
     return PageableExecutionUtils.getPage(ticketList, pageRequest,
