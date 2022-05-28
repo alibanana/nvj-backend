@@ -42,8 +42,8 @@ public class TicketServiceImpl implements TicketService {
   public Page<Ticket> findByFilter(Integer page, Integer size, String orderBy, String sortBy,
       TicketFilterRequest request) {
     PageRequest pageRequest = validateAndGetPageRequest(page, size, orderBy, sortBy);
-    return ticketRepository.findAllByTitleAndPriceBetween(request.getTitle(),
-        request.getFromPrice(), request.getToPrice(), pageRequest);
+    return ticketRepository.findAllByTitleAndPriceBetweenAndPurchasableEquals(request.getTitle(),
+        request.getFromPrice(), request.getToPrice(), request.getPurchasable(), pageRequest);
   }
 
   @Override
@@ -118,6 +118,7 @@ public class TicketServiceImpl implements TicketService {
   private Ticket updateTicketAndTicketArchives(Ticket ticket, TicketRequest request) {
     ticket.setDescription(request.getDescription());
     ticket.setPrice(request.getPrice());
+    ticket.setPurchasable(request.isPurchasable());
     TicketArchive ticketArchive = ticketArchiveService.createAndReturnTicketArchive(request,
         ticket.getVersion() + 1);
     ticket.getTicketArchives().add(ticketArchive);

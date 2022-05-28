@@ -6,6 +6,6 @@ import org.springframework.data.domain.PageRequest;
 
 public interface TicketRepositoryCustom {
 
-  Page<Ticket> findAllByTitleAndPriceBetween(String title, Integer fromPrice, Integer toPrice,
-      PageRequest pageRequest);
+  Page<Ticket> findAllByTitleAndPriceBetweenAndPurchasableEquals(String title, Integer fromPrice,
+      Integer toPrice, Boolean purchasable, PageRequest pageRequest);
 }

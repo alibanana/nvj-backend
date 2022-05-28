@@ -5,4 +5,5 @@ public interface MongoFieldNames {
   // Ticket
   String TICKET_TITLE = "title";
   String TICKET_PRICE = "price";
+  String TICKET_PURCHASABLE = "purchasable";
 }

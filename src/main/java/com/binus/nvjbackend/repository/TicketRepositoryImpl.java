@@ -20,18 +20,23 @@ public class TicketRepositoryImpl implements TicketRepositoryCustom {
   private MongoTemplate mongoTemplate;
 
   @Override
-  public Page<Ticket> findAllByTitleAndPriceBetween(String title, Integer fromPrice,
-      Integer toPrice, PageRequest pageRequest) {
+  public Page<Ticket> findAllByTitleAndPriceBetweenAndPurchasableEquals(String title,
+      Integer fromPrice, Integer toPrice, Boolean purchasable, PageRequest pageRequest) {
     Query query = new Query();
+
+    if (Objects.nonNull(title)) {
+      query.addCriteria(where(MongoFieldNames.TICKET_TITLE)
+          .regex(String.format(".*%s.*", title), "i"));
+    }
 
     if (Objects.nonNull(fromPrice) && Objects.nonNull(toPrice)) {
       query.addCriteria(where(MongoFieldNames.TICKET_PRICE)
           .gte(fromPrice).lte(toPrice));
     }
 
-    if (Objects.nonNull(title)) {
-      query.addCriteria(where(MongoFieldNames.TICKET_TITLE)
-          .regex(String.format(".*%s.*", title), "i"));
+    if (Objects.nonNull(purchasable)) {
+      query.addCriteria(where(MongoFieldNames.TICKET_PURCHASABLE)
+          .is(purchasable));
     }
 
     query.with(pageRequest);

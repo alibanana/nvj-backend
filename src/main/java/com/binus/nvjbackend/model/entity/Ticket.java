@@ -29,6 +29,7 @@ public class Ticket extends BaseMongoEntity {
   private String title;
   private String description;
   private Integer price;
+  private Boolean purchasable;
 
   @Version
   private Integer version;
@@ -39,11 +40,13 @@ public class Ticket extends BaseMongoEntity {
   private List<TicketArchive> ticketArchives;
 
   public Ticket(String id, Date createdAt, Date updatedAt, String title, String description,
-      Integer price, Integer version, boolean markForDelete, List<TicketArchive> ticketArchives) {
+      Integer price, Boolean purchasable, Integer version, boolean markForDelete,
+      List<TicketArchive> ticketArchives) {
     super(id, createdAt, updatedAt);
     this.title = title;
     this.description = description;
     this.price = price;
+    this.purchasable = purchasable;
     this.version = version;
     this.markForDelete = markForDelete;
     this.ticketArchives = ticketArchives;

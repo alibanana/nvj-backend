@@ -62,6 +62,7 @@ public class TicketController extends BaseController {
         .title(ticket.getTitle())
         .description(ticket.getDescription())
         .price(ticket.getPrice())
+        .purchasable(ticket.getPurchasable())
         .build();
   }
 }
