@@ -42,11 +42,6 @@ public class JwtUtil {
         .compact();
   }
 
-  public String getJwtFromCookies(HttpServletRequest request) {
-    Cookie cookie = WebUtils.getCookie(request, sysparamProperties.getJwtCookieName());
-    return cookie != null ? cookie.getValue() : null;
-  }
-
   public String getUsernameFromJwtToken(String token) {
     return Jwts.parser().setSigningKey(sysparamProperties.getJwtSecret())
         .parseClaimsJws(token)

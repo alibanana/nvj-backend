@@ -30,12 +30,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
     try {
-      String jwt = jwtUtil.getJwtFromCookies(request);
+      String token = request.getHeader("Authorization");
 
-      if (jwt != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-        String username = jwtUtil.getUsernameFromJwtToken(jwt);
+      if (token != null && token.startsWith("Bearer ") &&
+          SecurityContextHolder.getContext().getAuthentication() == null) {
+        token = token.substring(7);
+        String username = jwtUtil.getUsernameFromJwtToken(token);
         UserDetails userDetails = userDetailService.loadUserByUsername(username);
-        if (jwtUtil.validateToken(jwt)) {
+        if (jwtUtil.validateToken(token)) {
           UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
               new UsernamePasswordAuthenticationToken(userDetails, null,
                   userDetails.getAuthorities());
