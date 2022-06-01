@@ -15,4 +15,10 @@ public class ApiPathClient {
   public static final String EXPERIENCE_FIND_ALL = "/findAll";
 
   public static final String EXPERIENCE_FIND_BY_ID = "/findById";
+
+  public static final String BASE_PATH_ORDER = BASE_PATH_API + "/orders";
+
+  public static final String ORDER_CREATE = "/create";
+
+  public static final String ORDER_HANDLE_NOTIFICATION = "/notification/handle";
 }

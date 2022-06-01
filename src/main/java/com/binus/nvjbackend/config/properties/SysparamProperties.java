@@ -28,8 +28,17 @@ public class SysparamProperties {
   private String fileRetrieveUrl;
 
   @Value("${sysparam.qrcode.default-width}")
-  private int qrCodeDefaultWidth;
+  private Integer qrCodeDefaultWidth;
 
   @Value("${sysparam.qrcode.default-height}")
-  private int qrCodeDefaultHeight;
+  private Integer qrCodeDefaultHeight;
+
+  @Value("${sysparam.midtrans.client-key}")
+  private String midtransClientKey;
+
+  @Value("${sysparam.midtrans.server-key}")
+  private String midtransServerKey;
+
+  @Value("${sysparam.midtrans.is-production}")
+  private Boolean midtransIsProduction;
 }

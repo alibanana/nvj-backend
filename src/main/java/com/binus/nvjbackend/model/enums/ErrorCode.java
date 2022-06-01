@@ -22,9 +22,15 @@ public enum ErrorCode {
       "Page size must be greater than zero"),
   SORT_BY_VALUES_INVALID("ERR-40010", 400,
       "The only allowed sortBy values are [ASC, DESC]"),
+  ORDER_ID_MISSING("ERR-PA40011", 400,
+      "Order id is missing from the request body"),
+  ORDER_SIGNATURE_KEY_MISSING("ERR-PA40012", 400,
+      "Signature key is missing from the request body"),
 
   USER_CREDENTIALS_INVALID("ERR-PA40101", 401,
       "The requested username and password is invalid"),
+  ORDER_SIGNATURE_KEY_INVALID("ERR-PA40102", 401,
+      "The requested signature_key is invalid"),
 
   ROLE_NOT_FOUND("ERR-PA40401", 404,
       "The requested role doesn't exists"),
@@ -38,6 +44,8 @@ public enum ErrorCode {
       "Email template with the requested template name doesn't exists"),
   ON_SITE_EXPERIENCE_NOT_FOUND("ERR-PA40406", 404,
       "The requested on-site experience does not exists"),
+  MIDTRANS_ORDER_ID_NOT_FOUND("ERR-PA40407", 404,
+      "The requested midtrans-orderId does not exists"),
 
   FILE_DELETION_FAILED("ERR-PA40901", 409,
       "The requested file cannot be deleted"),

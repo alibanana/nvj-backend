@@ -28,7 +28,7 @@ public class FileStorageServiceImpl implements FileStorageService {
   private Path rootDir;
 
   @Autowired
-  SysparamProperties sysparamProperties;
+  private SysparamProperties sysparamProperties;
 
   @PostConstruct
   public void init() {
