@@ -12,7 +12,7 @@ public interface TicketService {
   Ticket create(TicketRequest request);
 
   Page<Ticket> findByFilter(Integer page, Integer size, String orderBy, String sortBy,
-      TicketFilterRequest request);
+      TicketFilterRequest request, Boolean isClientApi);
 
   List<Ticket> findByIds(List<String> ids);
 

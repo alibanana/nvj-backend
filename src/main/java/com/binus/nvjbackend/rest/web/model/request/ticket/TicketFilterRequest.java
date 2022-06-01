@@ -17,8 +17,10 @@ public class TicketFilterRequest implements Serializable {
 
   private static final long serialVersionUID = 4227437180014518683L;
 
+  private String id;
   private String title;
   private Integer fromPrice;
   private Integer toPrice;
   private Boolean purchasable;
+  private Boolean markForDelete;
 }

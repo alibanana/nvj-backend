@@ -22,4 +22,5 @@ public class TicketResponse implements Serializable {
   private String description;
   private Integer price;
   private Boolean purchasable;
+  private Boolean markForDelete;
 }

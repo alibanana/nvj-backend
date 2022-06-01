@@ -42,7 +42,7 @@ public class TicketController extends BaseController {
       @RequestParam(required = false) Integer size, @RequestParam(required = false) String orderBy,
       @RequestParam(required = false) String sortBy,
       @Valid @RequestBody TicketFilterRequest request) {
-    Page<Ticket> tickets = ticketService.findByFilter(page, size, orderBy, sortBy, request);
+    Page<Ticket> tickets = ticketService.findByFilter(page, size, orderBy, sortBy, request, false);
     List<TicketResponse> content = tickets.getContent().stream()
         .map(this::toTicketResponse)
         .collect(Collectors.toList());
@@ -63,6 +63,7 @@ public class TicketController extends BaseController {
         .description(ticket.getDescription())
         .price(ticket.getPrice())
         .purchasable(ticket.getPurchasable())
+        .markForDelete(ticket.getMarkForDelete())
         .build();
   }
 }

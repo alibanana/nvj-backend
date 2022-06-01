@@ -20,9 +20,15 @@ public class TicketRepositoryImpl implements TicketRepositoryCustom {
   private MongoTemplate mongoTemplate;
 
   @Override
-  public Page<Ticket> findAllByTitleAndPriceBetweenAndPurchasableEquals(String title,
-      Integer fromPrice, Integer toPrice, Boolean purchasable, PageRequest pageRequest) {
+  public Page<Ticket> findAllByIdAndTitleAndPriceBetweenAndPurchasableEqualsAndMarkForDeleteEquals(String id,
+      String title, Integer fromPrice, Integer toPrice, Boolean purchasable, Boolean markForDelete,
+      PageRequest pageRequest) {
     Query query = new Query();
+
+    if (Objects.nonNull(id)) {
+      query.addCriteria(where(MongoFieldNames.TICKET_ID)
+          .is(id));
+    }
 
     if (Objects.nonNull(title)) {
       query.addCriteria(where(MongoFieldNames.TICKET_TITLE)
@@ -37,6 +43,11 @@ public class TicketRepositoryImpl implements TicketRepositoryCustom {
     if (Objects.nonNull(purchasable)) {
       query.addCriteria(where(MongoFieldNames.TICKET_PURCHASABLE)
           .is(purchasable));
+    }
+
+    if (Objects.nonNull(markForDelete)) {
+      query.addCriteria(where(MongoFieldNames.TICKET_MARK_FOR_DELETE)
+          .is(markForDelete));
     }
 
     query.with(pageRequest);

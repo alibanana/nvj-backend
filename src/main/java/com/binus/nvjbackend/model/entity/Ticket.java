@@ -34,13 +34,13 @@ public class Ticket extends BaseMongoEntity {
   @Version
   private Integer version;
 
-  private boolean markForDelete;
+  private Boolean markForDelete;
 
   @DBRef
   private List<TicketArchive> ticketArchives;
 
   public Ticket(String id, Date createdAt, Date updatedAt, String title, String description,
-      Integer price, Boolean purchasable, Integer version, boolean markForDelete,
+      Integer price, Boolean purchasable, Integer version, Boolean markForDelete,
       List<TicketArchive> ticketArchives) {
     super(id, createdAt, updatedAt);
     this.title = title;

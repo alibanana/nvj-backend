@@ -37,7 +37,7 @@ public class TicketClientController extends BaseController {
       @RequestParam(required = false) Integer size, @RequestParam(required = false) String orderBy,
       @RequestParam(required = false) String sortBy,
       @Valid @RequestBody TicketFilterRequest request) {
-    Page<Ticket> tickets = ticketService.findByFilter(page, size, orderBy, sortBy, request);
+    Page<Ticket> tickets = ticketService.findByFilter(page, size, orderBy, sortBy, request, true);
     List<TicketClientResponse> content = tickets.getContent().stream()
         .map(this::toTicketClientResponse)
         .collect(Collectors.toList());

@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 
 public interface TicketRepositoryCustom {
 
-  Page<Ticket> findAllByTitleAndPriceBetweenAndPurchasableEquals(String title, Integer fromPrice,
-      Integer toPrice, Boolean purchasable, PageRequest pageRequest);
+  Page<Ticket> findAllByIdAndTitleAndPriceBetweenAndPurchasableEqualsAndMarkForDeleteEquals(
+      String id, String title, Integer fromPrice, Integer toPrice, Boolean purchasable,
+      Boolean markForDelete, PageRequest pageRequest);
 }

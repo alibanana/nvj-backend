@@ -28,6 +28,8 @@ public enum ErrorCode {
       "Signature key is missing from the request body"),
   USER_PHONE_NUMBER_INVALID("ERR-PA40013", 400,
       "Phone number requested is invalid, please re-check"),
+  SORT_BY_AND_ORDER_BY_MUST_BOTH_EXISTS("ERR-PA40014", 400,
+      "Both sort by and order by must be filled"),
 
   USER_CREDENTIALS_INVALID("ERR-PA40101", 401,
       "The requested username and password is invalid"),

@@ -40,10 +40,12 @@ public class TicketServiceImpl implements TicketService {
 
   @Override
   public Page<Ticket> findByFilter(Integer page, Integer size, String orderBy, String sortBy,
-      TicketFilterRequest request) {
+      TicketFilterRequest request, Boolean isClientApi) {
     PageRequest pageRequest = validateAndGetPageRequest(page, size, orderBy, sortBy);
-    return ticketRepository.findAllByTitleAndPriceBetweenAndPurchasableEquals(request.getTitle(),
-        request.getFromPrice(), request.getToPrice(), request.getPurchasable(), pageRequest);
+    setTicketFilterRequestMarkForDeleteValue(request, isClientApi);
+    return ticketRepository.findAllByIdAndTitleAndPriceBetweenAndPurchasableEqualsAndMarkForDeleteEquals(
+        request.getId(), request.getTitle(), request.getFromPrice(), request.getToPrice(),
+        request.getPurchasable(), request.getMarkForDelete(), pageRequest);
   }
 
   @Override
@@ -75,8 +77,17 @@ public class TicketServiceImpl implements TicketService {
       String sortBy) {
     page = validateAndInitializePageNumber(page);
     size = validateAndInitializePageSize(size);
-    validateSortBy(sortBy);
+    validateSortByAndOrderBy(sortBy, orderBy);
     return getPageRequest(page, size, orderBy, sortBy);
+  }
+
+  private void setTicketFilterRequestMarkForDeleteValue(TicketFilterRequest request,
+      Boolean isClientApi) {
+    if (isClientApi) {
+      request.setMarkForDelete(false);
+    } else if (Objects.isNull(request.getMarkForDelete())) {
+      request.setMarkForDelete(false);
+    }
   }
 
   private int validateAndInitializePageNumber(Integer page) {
@@ -93,9 +104,14 @@ public class TicketServiceImpl implements TicketService {
     return Objects.isNull(size) ? 10 : size;
   }
 
-  private void validateSortBy(String sortBy) {
+  private void validateSortByAndOrderBy(String sortBy, String orderBy) {
     if (Objects.nonNull(sortBy) && !sortBy.equals(ASC.name()) && !sortBy.equals(DESC.name())) {
       throw new BaseException(ErrorCode.SORT_BY_VALUES_INVALID);
+    }
+
+    if ((Objects.nonNull(sortBy) && Objects.isNull(orderBy)) || (Objects.isNull(sortBy) &&
+        Objects.nonNull(orderBy))) {
+      throw new BaseException(ErrorCode.SORT_BY_AND_ORDER_BY_MUST_BOTH_EXISTS);
     }
   }
 
