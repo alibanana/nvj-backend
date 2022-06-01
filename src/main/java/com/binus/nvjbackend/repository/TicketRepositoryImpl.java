@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -25,7 +26,7 @@ public class TicketRepositoryImpl implements TicketRepositoryCustom {
       PageRequest pageRequest) {
     Query query = new Query();
 
-    if (Objects.nonNull(id)) {
+    if (Objects.nonNull(id) && StringUtils.hasText(id)) {
       query.addCriteria(where(MongoFieldNames.TICKET_ID)
           .is(id));
     }
