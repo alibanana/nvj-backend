@@ -26,6 +26,8 @@ public enum ErrorCode {
       "Order id is missing from the request body"),
   ORDER_SIGNATURE_KEY_MISSING("ERR-PA40012", 400,
       "Signature key is missing from the request body"),
+  USER_PHONE_NUMBER_INVALID("ERR-PA40013", 400,
+      "Phone number requested is invalid, please re-check"),
 
   USER_CREDENTIALS_INVALID("ERR-PA40101", 401,
       "The requested username and password is invalid"),

@@ -39,6 +39,7 @@ public class BaseController {
             .pageSize(page.getSize())
             .pageNumber(page.getNumber())
             .totalRecords(page.getTotalElements())
+            .totalPages(page.getTotalPages())
             .build())
         .build();
   }

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -17,8 +18,11 @@ public class LoginResponse implements Serializable {
 
   private static final long serialVersionUID = -798469217763610019L;
 
-  String id;
-  String username;
-  String email;
-  String token;
+  private String id;
+  private String username;
+  private String email;
+  private String token;
+  private String phoneNumber;
+  private String placeOfBirth;
+  private Date dateOfBirth;
 }

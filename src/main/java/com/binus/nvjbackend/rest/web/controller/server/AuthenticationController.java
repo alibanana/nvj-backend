@@ -51,6 +51,9 @@ public class AuthenticationController extends BaseController {
         .username(userDetails.getUsername())
         .email(userDetails.getEmail())
         .token(jwtCookie.getValue())
+        .phoneNumber(userDetails.getPhoneNumber())
+        .placeOfBirth(userDetails.getPlaceOfBirth())
+        .dateOfBirth(userDetails.getDateOfBirth())
         .build();
   }
 

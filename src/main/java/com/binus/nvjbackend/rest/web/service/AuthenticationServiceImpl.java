@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.regex.Pattern;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -77,8 +78,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     } else if (userRepository.existsByEmail(registerRequest.getEmail())) {
       throw new BaseException(ErrorCode.EMAIL_ALREADY_EXISTS);
     }
+    validatePhoneNumber(registerRequest.getPhoneNumber());
     roleUtil.validateRoleType(registerRequest.getRoleType());
     saveNewUser(registerRequest);
+  }
+
+  private void validatePhoneNumber(String phoneNumber) {
+    Pattern pattern =
+        Pattern.compile("^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4,9}$");
+    if (!pattern.matcher(phoneNumber).matches()) {
+      throw new BaseException(ErrorCode.USER_PHONE_NUMBER_INVALID);
+    }
   }
 
   private void saveNewUser(RegisterRequest request) throws IOException, WriterException {
@@ -96,6 +106,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         .username(request.getUsername())
         .email(request.getEmail())
         .password(encoder.encode(request.getPassword()))
+        .phoneNumber(request.getPhoneNumber())
+        .placeOfBirth(request.getPlaceOfBirth())
+        .dateOfBirth(request.getDateOfBirth())
         .role(roleRepository.findByRoleType(request.getRoleType()))
         .qrCodeImage(image)
         .build();

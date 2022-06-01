@@ -28,6 +28,9 @@ public class User extends BaseMongoEntity {
   private String username;
   private String email;
   private String password;
+  private String phoneNumber;
+  private String placeOfBirth;
+  private Date dateOfBirth;
 
   @DBRef
   private Role role;

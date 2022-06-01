@@ -28,6 +28,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
         .email(user.getEmail())
         .password(user.getPassword())
         .authorities(getUserAuthorities(user))
+        .phoneNumber(user.getPhoneNumber())
+        .placeOfBirth(user.getPlaceOfBirth())
+        .dateOfBirth(user.getDateOfBirth())
         .build();
   }
 

@@ -57,6 +57,7 @@ public class TicketClientController extends BaseController {
     return TicketClientResponse.builder()
         .id(ticket.getId())
         .title(ticket.getTitle())
+        .qty(0)
         .price(ticket.getPrice())
         .purchasable(ticket.getPurchasable())
         .build();

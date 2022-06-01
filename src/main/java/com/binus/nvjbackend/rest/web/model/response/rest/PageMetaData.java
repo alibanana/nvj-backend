@@ -20,4 +20,5 @@ public class PageMetaData implements Serializable {
   private long pageSize = 0L;
   private long pageNumber = 0L;
   private long totalRecords = 0L;
+  private long totalPages = 0L;
 }

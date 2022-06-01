@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Date;
 
 @Data
 @Builder
@@ -19,15 +20,16 @@ public class UserDetailsImpl implements UserDetails {
   private static final long serialVersionUID = 1l;
 
   private String id;
-
   private String username;
-
   private String email;
-
   private String token;
 
   @JsonIgnore
   private String password;
+
+  private String phoneNumber;
+  private String placeOfBirth;
+  private Date dateOfBirth;
 
   private Collection<? extends GrantedAuthority> authorities;
 
