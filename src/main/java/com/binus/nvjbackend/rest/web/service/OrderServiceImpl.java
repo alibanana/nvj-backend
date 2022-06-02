@@ -8,12 +8,14 @@ import com.binus.nvjbackend.model.exception.BaseException;
 import com.binus.nvjbackend.repository.OrderRepository;
 import com.binus.nvjbackend.rest.web.model.request.order.OrderRequest;
 import com.binus.nvjbackend.rest.web.util.DateUtil;
+import com.google.common.hash.Hashing;
 import com.midtrans.httpclient.error.MidtransError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
@@ -100,19 +102,10 @@ public class OrderServiceImpl implements OrderService {
     String signatureKey = (String) requestBody.get("signature_key");
     String stringToHash = order.getMidtrans().getOrderId() + requestBody.get("status_code") +
         order.getTotalPrice() + sysparamProperties.getMidtransServerKey();
-    if (!signatureKey.equals(hashSha512(stringToHash))) {
+    if (!signatureKey.equals(Hashing.sha512().hashString(stringToHash, StandardCharsets.UTF_8)
+        .toString())) {
       throw new BaseException(ErrorCode.ORDER_SIGNATURE_KEY_INVALID);
     }
-  }
-
-  private String hashSha512(String input) {
-    byte[] messageDigest = md.digest(input.getBytes());
-    BigInteger no = new BigInteger(1, messageDigest);
-    String hashtext = no.toString(16);
-    while (hashtext.length() < 32) {
-      hashtext = "0" + hashtext;
-    }
-    return hashtext;
   }
 
   private void updateOrderToMongo(Map<String, Object> requestBody, Order order)
