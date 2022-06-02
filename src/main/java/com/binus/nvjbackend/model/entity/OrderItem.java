@@ -25,14 +25,14 @@ public class OrderItem extends BaseMongoEntity {
   private static final long serialVersionUID = -7473046603854374337L;
 
   private Integer quantity;
-  private Integer price;
+  private Double price;
 
   @DBRef
   private Ticket ticket;
 
   private Integer ticketVersion;
 
-  public OrderItem(String id, Date createdAt, Date updatedAt, Integer quantity, Integer price,
+  public OrderItem(String id, Date createdAt, Date updatedAt, Integer quantity, Double price,
       Ticket ticket, Integer ticketVersion) {
     super(id, createdAt, updatedAt);
     this.quantity = quantity;

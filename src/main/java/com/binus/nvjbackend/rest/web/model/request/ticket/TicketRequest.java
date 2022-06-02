@@ -26,7 +26,7 @@ public class TicketRequest implements Serializable {
   private String description;
 
   @NotNull
-  private Integer price;
+  private Double price;
 
   @NotNull
   private boolean purchasable;

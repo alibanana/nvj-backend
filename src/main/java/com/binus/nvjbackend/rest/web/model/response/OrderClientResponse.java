@@ -24,7 +24,7 @@ public class OrderClientResponse implements Serializable {
   private String lastname;
   private String email;
   private Date visitDate;
-  private Integer totalPrice;
+  private Double totalPrice;
   private List<OrderItemClientResponse> orderItems;
   private Midtrans midtrans;
 

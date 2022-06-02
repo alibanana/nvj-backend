@@ -21,5 +21,5 @@ public class OrderItemClientResponse implements Serializable {
   private String title;
   private String description;
   private Integer quantity;
-  private Integer price;
+  private Double price;
 }

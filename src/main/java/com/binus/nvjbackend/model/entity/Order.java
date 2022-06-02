@@ -29,7 +29,7 @@ public class Order extends BaseMongoEntity {
   private String lastname;
   private String email;
   private Date visitDate;
-  private Integer totalPrice;
+  private Double totalPrice;
   private Midtrans midtrans;
 
   @DBRef

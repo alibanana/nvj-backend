@@ -20,6 +20,6 @@ public class TicketClientResponse implements Serializable {
   private String id;
   private String title;
   private Integer qty;
-  private Integer price;
+  private Double price;
   private Boolean purchasable;
 }

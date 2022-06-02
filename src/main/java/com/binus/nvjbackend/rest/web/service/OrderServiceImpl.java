@@ -82,10 +82,10 @@ public class OrderServiceImpl implements OrderService {
         .build();
   }
 
-  private Integer getTotalPrice(List<OrderItem> orderItems) {
+  private Double getTotalPrice(List<OrderItem> orderItems) {
     return orderItems.stream()
         .map(OrderItem::getPrice)
-        .reduce(0, Integer::sum);
+        .reduce(0.0, Double::sum);
   }
 
   private void validateRequestBody(Map<String, Object> requestBody) {

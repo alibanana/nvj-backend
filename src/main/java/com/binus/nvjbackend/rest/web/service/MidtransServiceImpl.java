@@ -72,10 +72,10 @@ public class MidtransServiceImpl implements MidtransService {
     return transactionDetails;
   }
 
-  private Integer getGrossAmount(List<OrderItem> orderItems) {
+  private Double getGrossAmount(List<OrderItem> orderItems) {
     return orderItems.stream()
         .map(OrderItem::getPrice)
-        .reduce(0, Integer::sum);
+        .reduce(0.0, Double::sum);
   }
 
   private List<Map<String, Object>> buildItemDetails(List<OrderItem> orderItems) {
