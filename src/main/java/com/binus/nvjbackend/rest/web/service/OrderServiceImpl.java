@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -86,7 +85,7 @@ public class OrderServiceImpl implements OrderService {
 
   private Double getTotalPrice(List<OrderItem> orderItems) {
     return orderItems.stream()
-        .map(OrderItem::getPrice)
+        .map(orderItem -> orderItem.getPrice() * orderItem.getQuantity())
         .reduce(0.0, Double::sum);
   }
 
@@ -112,15 +111,15 @@ public class OrderServiceImpl implements OrderService {
       throws ParseException {
     Order.Midtrans midtrans = order.getMidtrans();
     midtrans.setTransactionTime(
-        dateUtil.toDateFromMidtrans((String) requestBody.get("transaction_time")));
-    midtrans.setTransactionStatus((String) requestBody.get("transaction_status"));
-    midtrans.setTransactionId((String) requestBody.get("transaction_id"));
+        dateUtil.toDateFromMidtrans((String) requestBody.getOrDefault("transaction_time", null)));
+    midtrans.setTransactionStatus((String) requestBody.getOrDefault("transaction_status", null));
+    midtrans.setTransactionId((String) requestBody.getOrDefault("transaction_id", null));
     midtrans.setSettlementTime(
-        dateUtil.toDateFromMidtrans((String) requestBody.get("settlement_time")));
-    midtrans.setPaymentType((String) requestBody.get("settlement_type"));
-    midtrans.setGrossAmount(Double.valueOf((String) requestBody.get("gross_amount")));
-    midtrans.setFraudStatus((String) requestBody.get("fraud_status"));
-    midtrans.setCurrency((String) requestBody.get("currency"));
+        dateUtil.toDateFromMidtrans((String) requestBody.getOrDefault("settlement_time", null)));
+    midtrans.setPaymentType((String) requestBody.getOrDefault("settlement_type", null));
+    midtrans.setGrossAmount(Double.valueOf((String) requestBody.getOrDefault("gross_amount", null)));
+    midtrans.setFraudStatus((String) requestBody.getOrDefault("fraud_status", null));
+    midtrans.setCurrency((String) requestBody.getOrDefault("currency", null));
     orderRepository.save(order);
   }
 }

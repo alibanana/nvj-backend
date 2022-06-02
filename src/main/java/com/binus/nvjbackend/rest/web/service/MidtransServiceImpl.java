@@ -74,7 +74,7 @@ public class MidtransServiceImpl implements MidtransService {
 
   private Double getGrossAmount(List<OrderItem> orderItems) {
     return orderItems.stream()
-        .map(OrderItem::getPrice)
+        .map(orderItem -> orderItem.getPrice() * orderItem.getQuantity())
         .reduce(0.0, Double::sum);
   }
 
