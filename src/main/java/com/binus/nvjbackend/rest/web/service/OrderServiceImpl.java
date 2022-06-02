@@ -101,7 +101,7 @@ public class OrderServiceImpl implements OrderService {
   private void validateSignatureKey(Map<String, Object> requestBody, Order order) {
     String signatureKey = (String) requestBody.get("signature_key");
     String stringToHash = order.getMidtrans().getOrderId() + requestBody.get("status_code") +
-        order.getTotalPrice() + sysparamProperties.getMidtransServerKey();
+        requestBody.get("gross_amount") + sysparamProperties.getMidtransServerKey();
     if (!signatureKey.equals(Hashing.sha512().hashString(stringToHash, StandardCharsets.UTF_8)
         .toString())) {
       throw new BaseException(ErrorCode.ORDER_SIGNATURE_KEY_INVALID);
