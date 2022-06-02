@@ -46,14 +46,61 @@ public class Order extends BaseMongoEntity {
     private String token;
     private String redirectUrl;
 
-    // Not available initially
+    // All variables below are not available initially
     private Date transactionTime;
     private String transactionStatus;
     private String transactionId;
-    private Date settlementTime;
+    private String statusMessage;
+    private String statusCode;
+    private String signatureKey;
     private String paymentType;
+    private String merchantId;
+    private Date settlementTime;
     private Double grossAmount;
     private String fraudStatus;
     private String currency;
+
+    // For Credit Cards
+    private String maskedCard;
+    private String eci;
+    private String channelResponseMessage;
+    private String channelResponseCode;
+    private String cardType;
+    private String bank;
+    private String approvalCode;
+
+    // For QRIS
+    private String acquirer;
+
+    // For Mandiri Bill
+    private String billerCode;
+    private String billKey;
+
+    // For Virtual Accounts
+    private String permataVaNumber;
+    private List<VaNumber> vaNumbers;
+    private List<PaymentAmount> paymentAmounts;
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class VaNumber {
+      private String vaNumber;
+      private String bank;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class PaymentAmount {
+      private Date paidAt;
+      private Double amount;
+    }
   }
 }
