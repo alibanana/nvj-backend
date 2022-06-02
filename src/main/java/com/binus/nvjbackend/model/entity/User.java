@@ -24,7 +24,8 @@ public class User extends BaseMongoEntity {
 
   private static final long serialVersionUID = 3161008033335897044L;
 
-  private String fullname;
+  private String firstname;
+  private String lastname;
   private String username;
   private String email;
   private String password;
@@ -38,12 +39,18 @@ public class User extends BaseMongoEntity {
   @DBRef
   private Image qrCodeImage;
 
-  public User(String id, Date createdAt, Date updatedAt, String username, String email,
-      String password, Role role, Image qrCodeImage) {
+  public User(String id, Date createdAt, Date updatedAt, String firstname, String lastname,
+      String username, String email, String password, String phoneNumber, String placeOfBirth,
+      Date dateOfBirth, Role role, Image qrCodeImage) {
     super(id, createdAt, updatedAt);
+    this.firstname = firstname;
+    this.lastname = lastname;
     this.username = username;
     this.email = email;
     this.password = password;
+    this.phoneNumber = phoneNumber;
+    this.placeOfBirth = placeOfBirth;
+    this.dateOfBirth = dateOfBirth;
     this.role = role;
     this.qrCodeImage = qrCodeImage;
   }

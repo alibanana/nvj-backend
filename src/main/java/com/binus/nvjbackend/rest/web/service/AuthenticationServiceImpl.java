@@ -71,8 +71,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
   @Override
   public void register(RegisterRequest registerRequest) throws IOException, WriterException {
-    if (userRepository.existsByFullname(registerRequest.getFullname())) {
-      throw new BaseException(ErrorCode.FULLNAME_ALREADY_EXISTS);
+    if (userRepository.existsByFirstnameAndLastname(registerRequest.getFirstname(),
+        registerRequest.getLastname())) {
+      throw new BaseException(ErrorCode.NAME_ALREADY_EXISTS);
     } else if (userRepository.existsByUsername(registerRequest.getUsername())) {
       throw new BaseException(ErrorCode.USERNAME_ALREADY_EXISTS);
     } else if (userRepository.existsByEmail(registerRequest.getEmail())) {
@@ -102,7 +103,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
   private User buildUser(RegisterRequest request, Image image) {
     return User.builder()
-        .fullname(request.getFullname())
+        .firstname(request.getFirstname())
+        .lastname(request.getLastname())
         .username(request.getUsername())
         .email(request.getEmail())
         .password(encoder.encode(request.getPassword()))

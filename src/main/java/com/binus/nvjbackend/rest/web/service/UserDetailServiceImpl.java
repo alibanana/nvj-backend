@@ -24,6 +24,8 @@ public class UserDetailServiceImpl implements UserDetailsService {
     User user = userRepository.findByUsername(username);
     return UserDetailsImpl.builder()
         .id(user.getId())
+        .firstname(user.getFirstname())
+        .lastname(user.getLastname())
         .username(user.getUsername())
         .email(user.getEmail())
         .password(user.getPassword())

@@ -14,9 +14,9 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class LoginResponse implements Serializable {
+public class UserResponse implements Serializable {
 
-  private static final long serialVersionUID = -798469217763610019L;
+  private static final long serialVersionUID = -2519107299536565448L;
 
   private String id;
   private String firstname;
@@ -27,4 +27,6 @@ public class LoginResponse implements Serializable {
   private String phoneNumber;
   private String placeOfBirth;
   private Date dateOfBirth;
+  private RoleResponse role;
+  private String qrCodeImageUrl;
 }

@@ -159,7 +159,7 @@ public class OrderServiceImpl implements OrderService {
   private List<Order.Midtrans.VaNumber> toVaNumbers(Object vaNumbers) {
     List<Map<String, Object>> list = oMapper.convertValue(vaNumbers,
         new TypeReference<List<Map<String, Object>>>() {});
-    return list.stream()
+    return list.isEmpty() ? null : list.stream()
         .map(map -> Order.Midtrans.VaNumber.builder()
             .vaNumber((String) map.getOrDefault("va_number", null))
             .bank((String) map.getOrDefault("bank", null))
@@ -170,7 +170,7 @@ public class OrderServiceImpl implements OrderService {
   private List<Order.Midtrans.PaymentAmount> toPaymentAmounts(Object paymentAmounts) {
     List<Map<String, Object>> list = oMapper.convertValue(paymentAmounts,
         new TypeReference<List<Map<String, Object>>>() {});
-    return list.stream()
+    return list.isEmpty() ? null : list.stream()
         .map(map -> {
           try {
             return toPaymentAmount(map);

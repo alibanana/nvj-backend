@@ -48,6 +48,8 @@ public class AuthenticationController extends BaseController {
   private LoginResponse toLoginResponse(UserDetailsImpl userDetails, ResponseCookie jwtCookie) {
     return LoginResponse.builder()
         .id(userDetails.getId())
+        .firstname(userDetails.getFirstname())
+        .lastname(userDetails.getLastname())
         .username(userDetails.getUsername())
         .email(userDetails.getEmail())
         .token(jwtCookie.getValue())
