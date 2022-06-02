@@ -22,7 +22,9 @@ public class TicketArchive extends BaseMongoEntity {
 
   private String title;
   private String description;
-  private Integer price;
+  private Double price;
+  private String phoneNumber;
+  private String contactName;
   private Boolean purchasable;
   private Integer version;
   private boolean markForDelete;

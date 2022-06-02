@@ -9,6 +9,7 @@ import com.binus.nvjbackend.repository.RoleRepository;
 import com.binus.nvjbackend.repository.UserRepository;
 import com.binus.nvjbackend.rest.web.model.request.authentication.LoginRequest;
 import com.binus.nvjbackend.rest.web.model.request.authentication.RegisterRequest;
+import com.binus.nvjbackend.rest.web.util.OtherUtil;
 import com.binus.nvjbackend.rest.web.util.RoleUtil;
 import com.google.zxing.WriterException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
   @Autowired
   private RoleUtil roleUtil;
+  
+  @Autowired
+  private OtherUtil otherUtil;
 
   @Autowired
   private SysparamProperties sysparamProperties;
@@ -79,17 +83,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     } else if (userRepository.existsByEmail(registerRequest.getEmail())) {
       throw new BaseException(ErrorCode.EMAIL_ALREADY_EXISTS);
     }
-    validatePhoneNumber(registerRequest.getPhoneNumber());
+    otherUtil.validatePhoneNumber(registerRequest.getPhoneNumber());
     roleUtil.validateRoleType(registerRequest.getRoleType());
     saveNewUser(registerRequest);
-  }
-
-  private void validatePhoneNumber(String phoneNumber) {
-    Pattern pattern =
-        Pattern.compile("^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4,9}$");
-    if (!pattern.matcher(phoneNumber).matches()) {
-      throw new BaseException(ErrorCode.USER_PHONE_NUMBER_INVALID);
-    }
   }
 
   private void saveNewUser(RegisterRequest request) throws IOException, WriterException {

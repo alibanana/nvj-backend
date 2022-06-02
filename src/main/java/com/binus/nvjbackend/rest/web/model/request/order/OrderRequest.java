@@ -31,6 +31,9 @@ public class OrderRequest implements Serializable {
   @NotBlank
   private String email;
 
+  @NotBlank
+  private String phoneNumber;
+
   @NotNull
   private Date visitDate;
 

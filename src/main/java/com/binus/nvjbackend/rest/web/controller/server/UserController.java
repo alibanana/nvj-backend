@@ -7,6 +7,7 @@ import com.binus.nvjbackend.rest.web.model.response.RoleResponse;
 import com.binus.nvjbackend.rest.web.model.response.UserResponse;
 import com.binus.nvjbackend.rest.web.model.response.rest.RestSingleResponse;
 import com.binus.nvjbackend.rest.web.service.UserService;
+import com.binus.nvjbackend.rest.web.util.DateUtil;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,9 @@ public class UserController extends BaseController {
 
   @Autowired
   private UserService userService;
+
+  @Autowired
+  private DateUtil dateUtil;
 
   @PostMapping(value = ApiPath.CURRENT_USER_DETAILS)
   public RestSingleResponse<UserResponse> getCurrentUserDetails(HttpServletRequest request) {
@@ -40,7 +44,7 @@ public class UserController extends BaseController {
         .token(token)
         .phoneNumber(user.getPhoneNumber())
         .placeOfBirth(user.getPlaceOfBirth())
-        .dateOfBirth(user.getDateOfBirth())
+        .dateOfBirth(dateUtil.toDateOnlyFormat(user.getDateOfBirth()))
         .role(RoleResponse.builder()
             .name(user.getRole().getName())
             .roleType(user.getRole().getRoleType().name())

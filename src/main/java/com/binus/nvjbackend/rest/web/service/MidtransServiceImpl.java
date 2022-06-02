@@ -98,6 +98,7 @@ public class MidtransServiceImpl implements MidtransService {
     customerDetails.put("first_name", request.getFirstname());
     customerDetails.put("last_name", request.getLastname());
     customerDetails.put("email", request.getEmail());
+    customerDetails.put("phone", request.getPhoneNumber());
     return customerDetails;
   }
 }

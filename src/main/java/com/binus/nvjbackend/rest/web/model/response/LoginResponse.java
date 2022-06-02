@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -26,5 +25,5 @@ public class LoginResponse implements Serializable {
   private String token;
   private String phoneNumber;
   private String placeOfBirth;
-  private Date dateOfBirth;
+  private String dateOfBirth;
 }

@@ -7,6 +7,7 @@ import com.binus.nvjbackend.model.exception.BaseException;
 import com.binus.nvjbackend.repository.TicketRepository;
 import com.binus.nvjbackend.rest.web.model.request.ticket.TicketFilterRequest;
 import com.binus.nvjbackend.rest.web.model.request.ticket.TicketRequest;
+import com.binus.nvjbackend.rest.web.util.OtherUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,9 +32,13 @@ public class TicketServiceImpl implements TicketService {
   @Autowired
   private TicketRepository ticketRepository;
 
+  @Autowired
+  private OtherUtil otherUtil;
+
   @Override
   public Ticket create(TicketRequest request) {
     validateTicketDoesNotExistsByTitle(request.getTitle());
+    otherUtil.validatePhoneNumber(request.getPhoneNumber());
     TicketArchive ticketArchive = ticketArchiveService.createAndReturnTicketArchive(request, 0);
     return ticketRepository.save(initializeNewTicket(ticketArchive));
   }
@@ -134,6 +139,8 @@ public class TicketServiceImpl implements TicketService {
   private Ticket updateTicketAndTicketArchives(Ticket ticket, TicketRequest request) {
     ticket.setDescription(request.getDescription());
     ticket.setPrice(request.getPrice());
+    ticket.setPhoneNumber(request.getPhoneNumber());
+    ticket.setContactName(ticket.getContactName());
     ticket.setPurchasable(request.isPurchasable());
     TicketArchive ticketArchive = ticketArchiveService.createAndReturnTicketArchive(request,
         ticket.getVersion() + 1);

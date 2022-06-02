@@ -8,6 +8,7 @@ import com.binus.nvjbackend.model.exception.BaseException;
 import com.binus.nvjbackend.repository.OrderRepository;
 import com.binus.nvjbackend.rest.web.model.request.order.OrderRequest;
 import com.binus.nvjbackend.rest.web.util.DateUtil;
+import com.binus.nvjbackend.rest.web.util.OtherUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.Hashing;
@@ -46,6 +47,9 @@ public class OrderServiceImpl implements OrderService {
   @Autowired
   private DateUtil dateUtil;
 
+  @Autowired
+  private OtherUtil otherUtil;
+
   private MessageDigest md;
 
   private ObjectMapper oMapper;
@@ -58,6 +62,7 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   public Order createOrder(OrderRequest request) throws MidtransError {
+    otherUtil.validatePhoneNumber(request.getPhoneNumber());
     List<OrderItem> orderItems = orderItemService.createOrderItems(request.getOrderItems());
     Order.Midtrans midtrans = midtransService.createTransaction(request, orderItems);
     return orderRepository.save(buildOrder(request, orderItems, midtrans));
@@ -85,6 +90,7 @@ public class OrderServiceImpl implements OrderService {
         .firstname(request.getFirstname())
         .lastname(request.getLastname())
         .email(request.getEmail())
+        .phoneNumber(request.getPhoneNumber())
         .visitDate(request.getVisitDate())
         .totalPrice(getTotalPrice(orderItems))
         .midtrans(midtrans)

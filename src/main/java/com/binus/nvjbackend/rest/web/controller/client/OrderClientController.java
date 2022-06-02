@@ -52,6 +52,7 @@ public class OrderClientController extends BaseController {
         .firstname(order.getFirstname())
         .lastname(order.getLastname())
         .email(order.getEmail())
+        .phoneNumber(order.getPhoneNumber())
         .visitDate(order.getVisitDate())
         .totalPrice(order.getTotalPrice())
         .orderItems(order.getOrderItems().stream()

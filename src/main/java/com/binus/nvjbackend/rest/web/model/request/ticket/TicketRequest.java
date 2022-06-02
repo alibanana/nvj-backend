@@ -28,6 +28,12 @@ public class TicketRequest implements Serializable {
   @NotNull
   private Double price;
 
+  @NotBlank
+  private String phoneNumber;
+
+  @NotBlank
+  private String contactName;
+
   @NotNull
   private boolean purchasable;
 

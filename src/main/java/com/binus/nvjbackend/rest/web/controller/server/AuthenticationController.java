@@ -9,6 +9,7 @@ import com.binus.nvjbackend.rest.web.model.response.rest.RestBaseResponse;
 import com.binus.nvjbackend.rest.web.model.response.rest.RestSingleResponse;
 import com.binus.nvjbackend.rest.web.service.AuthenticationService;
 import com.binus.nvjbackend.rest.web.service.UserDetailsImpl;
+import com.binus.nvjbackend.rest.web.util.DateUtil;
 import com.binus.nvjbackend.rest.web.util.JwtUtil;
 import com.google.zxing.WriterException;
 import io.swagger.annotations.Api;
@@ -35,6 +36,9 @@ public class AuthenticationController extends BaseController {
   @Autowired
   private JwtUtil jwtUtil;
 
+  @Autowired
+  private DateUtil dateUtil;
+
   @PostMapping(value = ApiPath.LOGIN)
   public ResponseEntity<RestSingleResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request) {
     UserDetailsImpl userDetails = (UserDetailsImpl) authenticationService.login(request);
@@ -55,7 +59,7 @@ public class AuthenticationController extends BaseController {
         .token(jwtCookie.getValue())
         .phoneNumber(userDetails.getPhoneNumber())
         .placeOfBirth(userDetails.getPlaceOfBirth())
-        .dateOfBirth(userDetails.getDateOfBirth())
+        .dateOfBirth(dateUtil.toDateOnlyFormat(userDetails.getDateOfBirth()))
         .build();
   }
 

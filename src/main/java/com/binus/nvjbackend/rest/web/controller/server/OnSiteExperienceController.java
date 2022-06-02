@@ -12,11 +12,11 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Api(value = "Experiences", description = "Experiences Service API")
@@ -40,9 +40,10 @@ public class OnSiteExperienceController extends BaseController {
         .title(onSiteExperience.getTitle())
         .description(onSiteExperience.getDescription())
         .thumbnail(onSiteExperience.getThumbnail().getUrl())
-        .images(onSiteExperience.getImages().stream()
+        .images(Objects.nonNull(onSiteExperience.getImages()) ? onSiteExperience.getImages()
+            .stream()
             .map(Image::getUrl)
-            .collect(Collectors.toList()))
+            .collect(Collectors.toList()) : null)
         .build();
   }
 }

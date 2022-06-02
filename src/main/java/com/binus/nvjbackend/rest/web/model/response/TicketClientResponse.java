@@ -21,5 +21,7 @@ public class TicketClientResponse implements Serializable {
   private String title;
   private Integer qty;
   private Double price;
+  private String phoneNumber;
+  private String contactName;
   private Boolean purchasable;
 }

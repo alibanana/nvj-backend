@@ -9,6 +9,7 @@ import com.binus.nvjbackend.rest.web.model.request.onsiteexperience.OnSiteExperi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,9 +28,12 @@ public class OnSiteExperienceServiceImpl implements OnSiteExperienceService {
   public OnSiteExperience create(OnSiteExperienceRequest request) {
     validateOnSiteExperienceDoesNotExistsByTitle(request.getTitle());
     Image thumbnail = imageService.uploadImage(request.getThumbnail());
-    List<Image> images = request.getImages().stream()
-        .map(file -> imageService.uploadImage(file))
-        .collect(Collectors.toList());
+    List<Image> images = null;
+    if (Objects.nonNull(request.getImages())) {
+      images = request.getImages().stream()
+          .map(file -> imageService.uploadImage(file))
+          .collect(Collectors.toList());
+    }
     return onSiteExperienceRepository.save(buildOnSiteExperience(request, thumbnail, images));
   }
 
