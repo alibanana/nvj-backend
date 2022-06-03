@@ -84,6 +84,15 @@ public class OrderServiceImpl implements OrderService {
     updateOrderToMongo(requestBody, order);
   }
 
+  @Override
+  public Order findByMidtransOrderId(String midtransOrderId) {
+    Order order = orderRepository.findByMidtransOrderId(midtransOrderId);
+    if (Objects.isNull(order)) {
+      throw new BaseException(ErrorCode.MIDTRANS_ORDER_ID_NOT_FOUND);
+    }
+    return order;
+  }
+
   private Order buildOrder(OrderRequest request, List<OrderItem> orderItems,
       Order.Midtrans midtrans) {
     return Order.builder()

@@ -14,4 +14,6 @@ public interface OrderService {
   Boolean isMidtransOrderIdExists(String id);
 
   void handleNotification(Map<String, Object> requestBody) throws ParseException;
+
+  Order findByMidtransOrderId(String midtransOrderId);
 }

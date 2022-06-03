@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -44,6 +45,13 @@ public class OrderClientController extends BaseController {
       throws ParseException {
     orderService.handleNotification(requestBody);
     return toBaseResponse();
+  }
+
+  @PostMapping(ApiPathClient.ORDER_DETAIL_BY_MIDTRANS_ORDER_ID)
+  public RestSingleResponse<OrderClientResponse> getOrderDetailByMidtransOrderId(
+      @RequestParam String midtransOrderId) {
+    Order order = orderService.findByMidtransOrderId(midtransOrderId);
+    return toSingleResponse(toOrderClientResponse(order));
   }
 
   private OrderClientResponse toOrderClientResponse(Order order) {
