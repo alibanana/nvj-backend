@@ -25,6 +25,7 @@ public class OrderItemServiceImpl implements OrderItemService {
   public List<OrderItem> createOrderItems(List<OrderItemRequest> requests) {
     List<String> ticketIds = getTicketIdsFromRequests(requests);
     List<Ticket> tickets = ticketService.findByIds(ticketIds);
+    ticketService.validateTicketsPurchasable(tickets);
     Map<String, Integer> ticketIdAndQuantityMap = generateTicketIdAndQuantityMap(requests);
     Map<String, Ticket> ticketIdAndTicketMap = generateTicketIdAndTicketMap(tickets);
     List<OrderItem> orderItems = ticketIds.stream()

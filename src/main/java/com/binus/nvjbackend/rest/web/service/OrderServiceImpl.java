@@ -6,6 +6,7 @@ import com.binus.nvjbackend.model.entity.OrderItem;
 import com.binus.nvjbackend.model.enums.ErrorCode;
 import com.binus.nvjbackend.model.exception.BaseException;
 import com.binus.nvjbackend.repository.OrderRepository;
+import com.binus.nvjbackend.rest.web.model.request.order.OrderItemRequest;
 import com.binus.nvjbackend.rest.web.model.request.order.OrderRequest;
 import com.binus.nvjbackend.rest.web.util.DateUtil;
 import com.binus.nvjbackend.rest.web.util.OtherUtil;

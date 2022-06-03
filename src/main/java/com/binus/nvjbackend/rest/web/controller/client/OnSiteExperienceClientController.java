@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Api(value = "Client - Experiences", description = "Client - Experiences Service API")
@@ -51,9 +52,10 @@ public class OnSiteExperienceClientController extends BaseController {
         .title(onSiteExperience.getTitle())
         .description(onSiteExperience.getDescription())
         .thumbnail(onSiteExperience.getThumbnail().getUrl())
-        .images(onSiteExperience.getImages().stream()
+        .images(Objects.nonNull(onSiteExperience.getImages()) ? onSiteExperience.getImages()
+            .stream()
             .map(Image::getUrl)
-            .collect(Collectors.toList()))
+            .collect(Collectors.toList()) : null)
         .build();
   }
 }

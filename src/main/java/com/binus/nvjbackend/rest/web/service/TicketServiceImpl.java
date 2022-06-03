@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
@@ -64,12 +65,23 @@ public class TicketServiceImpl implements TicketService {
   }
 
   @Override
-  public Ticket updateByTitle(TicketRequest request) {
-    Ticket ticket = ticketRepository.findByTitle(request.getTitle());
+  public Ticket updateById(String id, TicketRequest request) {
+    Ticket ticket = Optional.of(ticketRepository.findById(id)).get()
+        .orElse(null);
     if (Objects.isNull(ticket)) {
       throw new BaseException(ErrorCode.TICKET_NOT_FOUND);
     }
+    validateNewTicketTitleUnique(ticket.getTitle(), request.getTitle());
     return updateTicketAndTicketArchives(ticket, request);
+  }
+
+  @Override
+  public void validateTicketsPurchasable(List<Ticket> tickets) {
+    for (Ticket ticket : tickets) {
+      if (!ticket.getPurchasable()) {
+        throw new BaseException(ErrorCode.TICKETS_ARE_NOT_PURCHASABLE);
+      }
+    }
   }
 
   private void validateTicketDoesNotExistsByTitle(String title) {
@@ -136,11 +148,18 @@ public class TicketServiceImpl implements TicketService {
     return ticket;
   }
 
+  private void validateNewTicketTitleUnique(String currentTitle, String newTitle) {
+    if (!currentTitle.equals(newTitle) && ticketRepository.existsByTitle(newTitle)) {
+      throw new BaseException(ErrorCode.NEW_TICKET_TITLE_EXISTS);
+    }
+  }
+
   private Ticket updateTicketAndTicketArchives(Ticket ticket, TicketRequest request) {
+    ticket.setTitle(request.getTitle());
     ticket.setDescription(request.getDescription());
     ticket.setPrice(request.getPrice());
     ticket.setPhoneNumber(request.getPhoneNumber());
-    ticket.setContactName(ticket.getContactName());
+    ticket.setContactName(request.getContactName());
     ticket.setPurchasable(request.isPurchasable());
     TicketArchive ticketArchive = ticketArchiveService.createAndReturnTicketArchive(request,
         ticket.getVersion() + 1);

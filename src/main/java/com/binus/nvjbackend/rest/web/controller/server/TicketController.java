@@ -12,6 +12,7 @@ import com.binus.nvjbackend.rest.web.service.TicketService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 @Api(value = "Tickets", description = "Tickets Service API")
 @RestController
 @RequestMapping(value = ApiPath.BASE_PATH_TICKET)
+@Validated
 public class TicketController extends BaseController {
 
   @Autowired
@@ -49,10 +51,10 @@ public class TicketController extends BaseController {
     return toPageResponse(content, tickets);
   }
 
-  @PutMapping(value = ApiPath.TICKET_UPDATE_BY_TITLE)
-  public RestSingleResponse<TicketResponse> updateByTitle(
+  @PutMapping(value = ApiPath.TICKET_UPDATE_BY_ID)
+  public RestSingleResponse<TicketResponse> updateById(@RequestParam String id,
       @Valid @RequestBody TicketRequest request) {
-    Ticket ticket = ticketService.updateByTitle(request);
+    Ticket ticket = ticketService.updateById(id, request);
     return toSingleResponse(toTicketResponse(ticket));
   }
 

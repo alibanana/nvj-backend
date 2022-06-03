@@ -30,6 +30,8 @@ public enum ErrorCode {
       "Phone number requested is invalid, please re-check"),
   SORT_BY_AND_ORDER_BY_MUST_BOTH_EXISTS("ERR-PA40014", 400,
       "Both sort by and order by must be filled"),
+  TICKETS_ARE_NOT_PURCHASABLE("ERR-PA40015", 400,
+      "One or more of the tickets requested are not purchasable"),
 
   USER_CREDENTIALS_INVALID("ERR-PA40101", 401,
       "The requested username and password is invalid"),
@@ -72,6 +74,8 @@ public enum ErrorCode {
       "The requested template name already exists"),
   ON_SITE_EXPERIENCE_EXISTS("ERR-PA42209", 422,
       "The requested on-site experience title already exists"),
+  NEW_TICKET_TITLE_EXISTS("ERR-PA42210", 422,
+      "The requested ticket title already exists"),
 
   UNSPECIFIED_ERROR("ERR-PA50001", 500,
       "Unspecified error that is not handled by generid handler"),

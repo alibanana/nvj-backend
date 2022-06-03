@@ -16,5 +16,7 @@ public interface TicketService {
 
   List<Ticket> findByIds(List<String> ids);
 
-  Ticket updateByTitle(TicketRequest request);
+  Ticket updateById(String id, TicketRequest request);
+
+  void validateTicketsPurchasable(List<Ticket> tickets);
 }
