@@ -18,5 +18,7 @@ public interface TicketService {
 
   Ticket updateById(String id, TicketRequest request);
 
+  void deleteById(String id);
+
   void validateTicketsPurchasable(List<Ticket> tickets);
 }

@@ -28,10 +28,13 @@ public class Order extends BaseMongoEntity {
   private String firstname;
   private String lastname;
   private String email;
+  private String description;
   private String phoneNumber;
   private Date visitDate;
   private Double totalPrice;
   private Midtrans midtrans;
+  private String paymentType;
+  private Boolean isManualOrder;
 
   @DBRef
   private List<OrderItem> orderItems;

@@ -76,6 +76,17 @@ public class TicketServiceImpl implements TicketService {
   }
 
   @Override
+  public void deleteById(String id) {
+    Ticket ticket = Optional.of(ticketRepository.findById(id)).get()
+        .orElse(null);
+    if (Objects.isNull(ticket)) {
+      throw new BaseException(ErrorCode.TICKET_NOT_FOUND);
+    }
+    ticket.setMarkForDelete(true);
+    ticketRepository.save(ticket);
+  }
+
+  @Override
   public void validateTicketsPurchasable(List<Ticket> tickets) {
     for (Ticket ticket : tickets) {
       if (!ticket.getPurchasable()) {

@@ -6,6 +6,7 @@ import com.binus.nvjbackend.rest.web.model.ApiPath;
 import com.binus.nvjbackend.rest.web.model.request.ticket.TicketFilterRequest;
 import com.binus.nvjbackend.rest.web.model.request.ticket.TicketRequest;
 import com.binus.nvjbackend.rest.web.model.response.TicketResponse;
+import com.binus.nvjbackend.rest.web.model.response.rest.RestBaseResponse;
 import com.binus.nvjbackend.rest.web.model.response.rest.RestPageResponse;
 import com.binus.nvjbackend.rest.web.model.response.rest.RestSingleResponse;
 import com.binus.nvjbackend.rest.web.service.TicketService;
@@ -13,6 +14,7 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,6 +58,12 @@ public class TicketController extends BaseController {
       @Valid @RequestBody TicketRequest request) {
     Ticket ticket = ticketService.updateById(id, request);
     return toSingleResponse(toTicketResponse(ticket));
+  }
+
+  @DeleteMapping(value = ApiPath.TICKET_DELETE_BY_ID)
+  public RestBaseResponse deleteById(@RequestParam String id) {
+    ticketService.deleteById(id);
+    return toBaseResponse();
   }
 
   private TicketResponse toTicketResponse(Ticket ticket) {

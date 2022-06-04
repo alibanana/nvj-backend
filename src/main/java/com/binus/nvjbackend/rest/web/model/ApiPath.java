@@ -66,7 +66,13 @@ public class ApiPath {
 
   public static final String TICKET_UPDATE_BY_ID = "/updateById";
 
+  public static final String TICKET_DELETE_BY_ID = "/deleteById";
+
   public static final String BASE_PATH_EXPERIENCE = BASE_PATH_API + "/experiences";
 
   public static final String EXPERIENCE_CREATE = "/create";
+
+  public static final String BASE_PATH_ORDER = BASE_PATH_API + "/orders";
+
+  public static final String ORDER_CREATE = "/create";
 }

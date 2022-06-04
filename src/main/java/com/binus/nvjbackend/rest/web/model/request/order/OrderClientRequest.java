@@ -1,6 +1,5 @@
-package com.binus.nvjbackend.rest.web.model.request.authentication;
+package com.binus.nvjbackend.rest.web.model.request.order;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,18 +7,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RegisterRequest implements Serializable {
+public class OrderClientRequest implements Serializable {
 
-  private static final long serialVersionUID = 4351953499150532640L;
+  private static final long serialVersionUID = 2453431216915945324L;
 
   @NotBlank
   private String firstname;
@@ -28,24 +29,14 @@ public class RegisterRequest implements Serializable {
   private String lastname;
 
   @NotBlank
-  private String username;
-
-  @NotBlank
   private String email;
-
-  @NotBlank
-  private String password;
 
   @NotBlank
   private String phoneNumber;
 
-  @NotBlank
-  private String placeOfBirth;
-
   @NotNull
-  @JsonFormat(pattern = "dd-MM-yyyy")
-  private Date dateOfBirth;
+  private Date visitDate;
 
-  @NotBlank
-  private String roleType;
+  @NotEmpty
+  private List<OrderItemRequest> orderItems;
 }

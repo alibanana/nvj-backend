@@ -6,7 +6,7 @@ import com.binus.nvjbackend.model.entity.OrderItem;
 import com.binus.nvjbackend.model.enums.ErrorCode;
 import com.binus.nvjbackend.model.exception.BaseException;
 import com.binus.nvjbackend.repository.OrderRepository;
-import com.binus.nvjbackend.rest.web.model.request.order.OrderItemRequest;
+import com.binus.nvjbackend.rest.web.model.request.order.OrderClientRequest;
 import com.binus.nvjbackend.rest.web.model.request.order.OrderRequest;
 import com.binus.nvjbackend.rest.web.util.DateUtil;
 import com.binus.nvjbackend.rest.web.util.OtherUtil;
@@ -23,8 +23,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -62,11 +61,20 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public Order createOrder(OrderRequest request) throws MidtransError {
+  public Order createOrder(OrderRequest request) {
     otherUtil.validatePhoneNumber(request.getPhoneNumber());
+    validateVisitDate(request.getVisitDate());
+    List<OrderItem> orderItems = orderItemService.createOrderItems(request.getOrderItems());
+    return orderRepository.save(buildOrder(request, orderItems));
+  }
+
+  @Override
+  public Order createClientOrder(OrderClientRequest request) throws MidtransError {
+    otherUtil.validatePhoneNumber(request.getPhoneNumber());
+    validateVisitDate(request.getVisitDate());
     List<OrderItem> orderItems = orderItemService.createOrderItems(request.getOrderItems());
     Order.Midtrans midtrans = midtransService.createTransaction(request, orderItems);
-    return orderRepository.save(buildOrder(request, orderItems, midtrans));
+    return orderRepository.save(buildClientOrder(request, orderItems, midtrans));
   }
 
   @Override
@@ -94,7 +102,28 @@ public class OrderServiceImpl implements OrderService {
     return order;
   }
 
-  private Order buildOrder(OrderRequest request, List<OrderItem> orderItems,
+  private void validateVisitDate(Date date) {
+    if (dateUtil.isDateBeforeToday(date)) {
+      throw new BaseException(ErrorCode.ORDER_VISIT_DATE_BEFORE_TODAY);
+    }
+  }
+
+  private Order buildOrder(OrderRequest request, List<OrderItem> orderItems) {
+    return Order.builder()
+        .firstname(request.getFirstname())
+        .lastname(request.getLastname())
+        .email(request.getEmail())
+        .description(request.getDescription())
+        .phoneNumber(request.getPhoneNumber())
+        .visitDate(request.getVisitDate())
+        .totalPrice(getTotalPrice(orderItems))
+        .paymentType(request.getPaymentType())
+        .isManualOrder(Boolean.TRUE)
+        .orderItems(orderItems)
+        .build();
+  }
+
+  private Order buildClientOrder(OrderClientRequest request, List<OrderItem> orderItems,
       Order.Midtrans midtrans) {
     return Order.builder()
         .firstname(request.getFirstname())
@@ -104,6 +133,7 @@ public class OrderServiceImpl implements OrderService {
         .visitDate(request.getVisitDate())
         .totalPrice(getTotalPrice(orderItems))
         .midtrans(midtrans)
+        .isManualOrder(Boolean.FALSE)
         .orderItems(orderItems)
         .build();
   }

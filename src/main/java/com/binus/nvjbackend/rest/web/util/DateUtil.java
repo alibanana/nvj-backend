@@ -23,4 +23,20 @@ public class DateUtil {
   public String toDateOnlyFormat(Date date) {
     return DATE_ONLY_FORMATTER.format(date);
   }
+
+  public Boolean isDateBeforeToday(Date date) {
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(1);
+    Date today = getDateOnlyForToday();
+    return date.before(today);
+  }
+
+  private Date getDateOnlyForToday() {
+    Date date = new Date();
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    return date;
+  }
 }

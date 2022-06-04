@@ -32,6 +32,8 @@ public enum ErrorCode {
       "Both sort by and order by must be filled"),
   TICKETS_ARE_NOT_PURCHASABLE("ERR-PA40015", 400,
       "One or more of the tickets requested are not purchasable"),
+  ORDER_VISIT_DATE_BEFORE_TODAY("ERR-PA40016", 400,
+      "Visit Date must be greater than or equal to today"),
 
   USER_CREDENTIALS_INVALID("ERR-PA40101", 401,
       "The requested username and password is invalid"),

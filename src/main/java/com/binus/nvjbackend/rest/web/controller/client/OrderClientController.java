@@ -4,7 +4,7 @@ import com.binus.nvjbackend.model.entity.Order;
 import com.binus.nvjbackend.model.entity.OrderItem;
 import com.binus.nvjbackend.rest.web.controller.BaseController;
 import com.binus.nvjbackend.rest.web.model.ApiPathClient;
-import com.binus.nvjbackend.rest.web.model.request.order.OrderRequest;
+import com.binus.nvjbackend.rest.web.model.request.order.OrderClientRequest;
 import com.binus.nvjbackend.rest.web.model.response.OrderClientResponse;
 import com.binus.nvjbackend.rest.web.model.response.OrderItemClientResponse;
 import com.binus.nvjbackend.rest.web.model.response.rest.RestBaseResponse;
@@ -33,9 +33,9 @@ public class OrderClientController extends BaseController {
   private OrderService orderService;
 
   @PostMapping(value = ApiPathClient.ORDER_CREATE)
-  public RestSingleResponse<OrderClientResponse> createOrder(
-      @Valid @RequestBody OrderRequest request) throws MidtransError {
-    Order order = orderService.createOrder(request);
+  public RestSingleResponse<OrderClientResponse> createOrderClient(
+      @Valid @RequestBody OrderClientRequest request) throws MidtransError {
+    Order order = orderService.createClientOrder(request);
     return toSingleResponse(toOrderClientResponse(order));
   }
 

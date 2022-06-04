@@ -1,5 +1,6 @@
 package com.binus.nvjbackend.rest.web.model.request.order;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,10 +33,17 @@ public class OrderRequest implements Serializable {
   private String email;
 
   @NotBlank
+  private String description;
+
+  @NotBlank
   private String phoneNumber;
 
   @NotNull
+  @JsonFormat(pattern = "dd-MM-yyyy")
   private Date visitDate;
+
+  @NotBlank
+  private String paymentType;
 
   @NotEmpty
   private List<OrderItemRequest> orderItems;
