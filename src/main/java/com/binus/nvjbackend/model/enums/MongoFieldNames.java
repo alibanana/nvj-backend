@@ -8,4 +8,8 @@ public interface MongoFieldNames {
   String TICKET_PRICE = "price";
   String TICKET_PURCHASABLE = "purchasable";
   String TICKET_MARK_FOR_DELETE = "markForDelete";
+
+  // On-Site Experience
+  String EXPERIENCE_ID = "id";
+  String EXPERIENCE_TITLE = "title";
 }

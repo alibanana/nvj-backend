@@ -72,6 +72,8 @@ public class ApiPath {
 
   public static final String EXPERIENCE_CREATE = "/create";
 
+  public static final String EXPERIENCE_FIND_BY_FILTER = "/findByFilter";
+
   public static final String BASE_PATH_ORDER = BASE_PATH_API + "/orders";
 
   public static final String ORDER_CREATE = "/create";

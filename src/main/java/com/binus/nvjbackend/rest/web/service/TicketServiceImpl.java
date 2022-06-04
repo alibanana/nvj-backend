@@ -12,7 +12,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,9 +19,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
-import static org.springframework.data.domain.Sort.Direction.ASC;
-import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Service
 public class TicketServiceImpl implements TicketService {
@@ -47,7 +43,7 @@ public class TicketServiceImpl implements TicketService {
   @Override
   public Page<Ticket> findByFilter(Integer page, Integer size, String orderBy, String sortBy,
       TicketFilterRequest request, Boolean isClientApi) {
-    PageRequest pageRequest = validateAndGetPageRequest(page, size, orderBy, sortBy);
+    PageRequest pageRequest = otherUtil.validateAndGetPageRequest(page, size, orderBy, sortBy);
     setTicketFilterRequestMarkForDeleteValue(request, isClientApi);
     return ticketRepository.findAllByIdAndTitleAndPriceBetweenAndPurchasableEqualsAndMarkForDeleteEquals(
         request.getId(), request.getTitle(), request.getFromPrice(), request.getToPrice(),
@@ -101,53 +97,12 @@ public class TicketServiceImpl implements TicketService {
     }
   }
 
-  private PageRequest validateAndGetPageRequest(Integer page, Integer size, String orderBy,
-      String sortBy) {
-    page = validateAndInitializePageNumber(page);
-    size = validateAndInitializePageSize(size);
-    validateSortByAndOrderBy(sortBy, orderBy);
-    return getPageRequest(page, size, orderBy, sortBy);
-  }
-
   private void setTicketFilterRequestMarkForDeleteValue(TicketFilterRequest request,
       Boolean isClientApi) {
     if (isClientApi) {
       request.setMarkForDelete(false);
     } else if (Objects.isNull(request.getMarkForDelete())) {
       request.setMarkForDelete(false);
-    }
-  }
-
-  private int validateAndInitializePageNumber(Integer page) {
-    if (Objects.nonNull(page) && page < 0) {
-      throw new BaseException(ErrorCode.PAGE_NUMBER_LESS_THAN_ZERO);
-    }
-    return Objects.isNull(page) ? 0 : page;
-  }
-
-  private int validateAndInitializePageSize(Integer size) {
-    if (Objects.nonNull(size) && size <= 0) {
-      throw new BaseException(ErrorCode.PAGE_SIZE_LESS_THAN_OR_EQUAL_TO_ZERO);
-    }
-    return Objects.isNull(size) ? 10 : size;
-  }
-
-  private void validateSortByAndOrderBy(String sortBy, String orderBy) {
-    if (Objects.nonNull(sortBy) && !sortBy.equals(ASC.name()) && !sortBy.equals(DESC.name())) {
-      throw new BaseException(ErrorCode.SORT_BY_VALUES_INVALID);
-    }
-
-    if ((Objects.nonNull(sortBy) && Objects.isNull(orderBy)) || (Objects.isNull(sortBy) &&
-        Objects.nonNull(orderBy))) {
-      throw new BaseException(ErrorCode.SORT_BY_AND_ORDER_BY_MUST_BOTH_EXISTS);
-    }
-  }
-
-  private PageRequest getPageRequest(Integer page, Integer size, String orderBy, String sortBy) {
-    if (Objects.isNull(orderBy) && Objects.isNull(sortBy)) {
-      return PageRequest.of(page, size);
-    } else {
-      return PageRequest.of(page, size, Sort.Direction.fromString(sortBy), orderBy);
     }
   }
 

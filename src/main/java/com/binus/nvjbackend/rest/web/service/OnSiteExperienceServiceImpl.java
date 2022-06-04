@@ -5,11 +5,14 @@ import com.binus.nvjbackend.model.entity.OnSiteExperience;
 import com.binus.nvjbackend.model.enums.ErrorCode;
 import com.binus.nvjbackend.model.exception.BaseException;
 import com.binus.nvjbackend.repository.OnSiteExperienceRepository;
+import com.binus.nvjbackend.rest.web.model.request.onsiteexperience.OnSiteExperienceFilterRequest;
 import com.binus.nvjbackend.rest.web.model.request.onsiteexperience.OnSiteExperienceRequest;
+import com.binus.nvjbackend.rest.web.util.OtherUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,6 +27,9 @@ public class OnSiteExperienceServiceImpl implements OnSiteExperienceService {
   @Autowired
   private OnSiteExperienceRepository onSiteExperienceRepository;
 
+  @Autowired
+  private OtherUtil otherUtil;
+
   @Override
   public OnSiteExperience create(OnSiteExperienceRequest request) {
     validateOnSiteExperienceDoesNotExistsByTitle(request.getTitle());
@@ -35,6 +41,14 @@ public class OnSiteExperienceServiceImpl implements OnSiteExperienceService {
           .collect(Collectors.toList());
     }
     return onSiteExperienceRepository.save(buildOnSiteExperience(request, thumbnail, images));
+  }
+
+  @Override
+  public Page<OnSiteExperience> findByFilter(Integer page, Integer size, String orderBy,
+      String sortBy, OnSiteExperienceFilterRequest request) {
+    PageRequest pageRequest = otherUtil.validateAndGetPageRequest(page, size, orderBy, sortBy);
+    return onSiteExperienceRepository.findAllByIdAndTitle(request.getId(), request.getTitle(),
+        pageRequest);
   }
 
   @Override
