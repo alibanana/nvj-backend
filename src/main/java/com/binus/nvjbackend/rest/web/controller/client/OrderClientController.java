@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.text.ParseException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Api(value = "Client - Orders", description = "Client - Orders Service API")
@@ -84,6 +85,8 @@ public class OrderClientController extends BaseController {
         .orderId(midtrans.getOrderId())
         .token(midtrans.getToken())
         .redirectUrl(midtrans.getRedirectUrl())
+        .transactionStatus(Objects.nonNull(midtrans.getTransactionStatus()) ?
+            midtrans.getTransactionStatus() : null)
         .build();
   }
 }

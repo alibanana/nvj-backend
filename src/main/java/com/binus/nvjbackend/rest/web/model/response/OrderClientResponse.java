@@ -38,5 +38,6 @@ public class OrderClientResponse implements Serializable {
     private String orderId;
     private String token;
     private String redirectUrl;
+    private String transactionStatus;
   }
 }
