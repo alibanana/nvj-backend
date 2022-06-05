@@ -5,6 +5,7 @@ import com.binus.nvjbackend.model.enums.MongoFieldNames;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -55,5 +56,14 @@ public class TicketRepositoryImpl implements TicketRepositoryCustom {
     List<Ticket> ticketList = mongoTemplate.find(query, Ticket.class);
     return PageableExecutionUtils.getPage(ticketList, pageRequest,
         () -> mongoTemplate.count(Query.of(query).limit(-1).skip(-1), Ticket.class));
+  }
+
+  @Override
+  public List<Ticket> findAllWithSortingAndMarkForDeleteFalse(Sort sort) {
+    Query query = new Query();
+    query.addCriteria(where(MongoFieldNames.TICKET_MARK_FOR_DELETE)
+        .is(Boolean.FALSE));
+    query.with(sort);
+    return mongoTemplate.find(query, Ticket.class);
   }
 }

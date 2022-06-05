@@ -7,10 +7,10 @@ import com.binus.nvjbackend.rest.web.model.ApiPath;
 import com.binus.nvjbackend.rest.web.model.request.onsiteexperience.OnSiteExperienceFilterRequest;
 import com.binus.nvjbackend.rest.web.model.request.onsiteexperience.OnSiteExperienceRequest;
 import com.binus.nvjbackend.rest.web.model.response.OnSiteExperienceResponse;
+import com.binus.nvjbackend.rest.web.model.response.rest.RestListResponse;
 import com.binus.nvjbackend.rest.web.model.response.rest.RestPageResponse;
 import com.binus.nvjbackend.rest.web.model.response.rest.RestSingleResponse;
 import com.binus.nvjbackend.rest.web.service.OnSiteExperienceService;
-import com.binus.nvjbackend.rest.web.util.OtherUtil;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,9 +34,6 @@ public class OnSiteExperienceController extends BaseController {
   @Autowired
   private OnSiteExperienceService onSiteExperienceService;
 
-  @Autowired
-  private OtherUtil otherUtil;
-
   @PostMapping(value = ApiPath.EXPERIENCE_CREATE)
   public RestSingleResponse<OnSiteExperienceResponse> create(
       @Valid @ModelAttribute OnSiteExperienceRequest request) {
@@ -44,7 +41,18 @@ public class OnSiteExperienceController extends BaseController {
     return toSingleResponse(toOnSiteExperienceResponse(onSiteExperience));
   }
 
-  @PostMapping(value = ApiPath.TICKET_FIND_BY_FILTER)
+  @PostMapping(value = ApiPath.EXPERIENCE_FIND_ALL)
+  public RestListResponse<OnSiteExperienceResponse> findAll(
+      @RequestParam(required = false) String orderBy,
+      @RequestParam(required = false) String sortBy) {
+    List<OnSiteExperience> onSiteExperiences = onSiteExperienceService.findAllWithSorting(orderBy,
+        sortBy);
+    return toListResponse(onSiteExperiences.stream()
+        .map(this::toOnSiteExperienceResponse)
+        .collect(Collectors.toList()));
+  }
+
+  @PostMapping(value = ApiPath.EXPERIENCE_FIND_BY_FILTER)
   public RestPageResponse<OnSiteExperienceResponse> findByFilter(
       @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size,
       @RequestParam(required = false) String orderBy, @RequestParam(required = false) String sortBy,

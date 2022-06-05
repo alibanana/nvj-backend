@@ -11,6 +11,7 @@ import com.binus.nvjbackend.rest.web.util.OtherUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,6 +54,15 @@ public class OnSiteExperienceServiceImpl implements OnSiteExperienceService {
 
   @Override
   public List<OnSiteExperience> findAll() {
+    return onSiteExperienceRepository.findAll();
+  }
+
+  @Override
+  public List<OnSiteExperience> findAllWithSorting(String orderBy, String sortBy) {
+    if (Objects.nonNull(orderBy) || Objects.nonNull(sortBy)) {
+      otherUtil.validateSortByAndOrderBy(sortBy, orderBy);
+      onSiteExperienceRepository.findAllWithSorting(Sort.by(sortBy, orderBy));
+    }
     return onSiteExperienceRepository.findAll();
   }
 

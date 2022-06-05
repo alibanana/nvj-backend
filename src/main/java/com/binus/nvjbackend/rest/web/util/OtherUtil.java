@@ -45,7 +45,7 @@ public class OtherUtil {
     return Objects.isNull(size) ? 10 : size;
   }
 
-  private void validateSortByAndOrderBy(String sortBy, String orderBy) {
+  public void validateSortByAndOrderBy(String sortBy, String orderBy) {
     if (Objects.nonNull(sortBy) && !sortBy.equals(ASC.name()) && !sortBy.equals(DESC.name())) {
       throw new BaseException(ErrorCode.SORT_BY_VALUES_INVALID);
     }

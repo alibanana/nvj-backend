@@ -7,6 +7,7 @@ import com.binus.nvjbackend.rest.web.model.request.ticket.TicketFilterRequest;
 import com.binus.nvjbackend.rest.web.model.request.ticket.TicketRequest;
 import com.binus.nvjbackend.rest.web.model.response.TicketResponse;
 import com.binus.nvjbackend.rest.web.model.response.rest.RestBaseResponse;
+import com.binus.nvjbackend.rest.web.model.response.rest.RestListResponse;
 import com.binus.nvjbackend.rest.web.model.response.rest.RestPageResponse;
 import com.binus.nvjbackend.rest.web.model.response.rest.RestSingleResponse;
 import com.binus.nvjbackend.rest.web.service.TicketService;
@@ -39,6 +40,15 @@ public class TicketController extends BaseController {
   public RestSingleResponse<TicketResponse> create(@Valid @RequestBody TicketRequest request) {
     Ticket ticket = ticketService.create(request);
     return toSingleResponse(toTicketResponse(ticket));
+  }
+
+  @PostMapping(value = ApiPath.TICKET_FIND_ALL)
+  public RestListResponse<TicketResponse> findAll(@RequestParam(required = false) String orderBy,
+      @RequestParam(required = false) String sortBy) {
+    List<Ticket> tickets = ticketService.findAllWithSorting(orderBy, sortBy);
+    return toListResponse(tickets.stream()
+        .map(this::toTicketResponse)
+        .collect(Collectors.toList()));
   }
 
   @PostMapping(value = ApiPath.TICKET_FIND_BY_FILTER)

@@ -16,5 +16,7 @@ public interface OnSiteExperienceService {
 
   List<OnSiteExperience> findAll();
 
+  List<OnSiteExperience> findAllWithSorting(String orderBy, String sortBy);
+
   OnSiteExperience findById(String id);
 }

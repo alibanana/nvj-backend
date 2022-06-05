@@ -12,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -38,6 +39,15 @@ public class TicketServiceImpl implements TicketService {
     otherUtil.validatePhoneNumber(request.getPhoneNumber());
     TicketArchive ticketArchive = ticketArchiveService.createAndReturnTicketArchive(request, 0);
     return ticketRepository.save(initializeNewTicket(ticketArchive));
+  }
+
+  @Override
+  public List<Ticket> findAllWithSorting(String orderBy, String sortBy) {
+    if (Objects.nonNull(orderBy) || Objects.nonNull(sortBy)) {
+      otherUtil.validateSortByAndOrderBy(sortBy, orderBy);
+      return ticketRepository.findAllWithSortingAndMarkForDeleteFalse(Sort.by(sortBy, orderBy));
+    }
+    return ticketRepository.findAllByMarkForDeleteFalse();
   }
 
   @Override

@@ -5,6 +5,7 @@ import com.binus.nvjbackend.model.enums.MongoFieldNames;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -40,5 +41,13 @@ public class OnSiteExperienceRepositoryImpl implements OnSiteExperienceRepositor
     List<OnSiteExperience> onSiteExperienceList = mongoTemplate.find(query, OnSiteExperience.class);
     return PageableExecutionUtils.getPage(onSiteExperienceList, pageRequest,
         () -> mongoTemplate.count(Query.of(query).limit(-1).skip(-1), OnSiteExperience.class));
+  }
+
+  @Override
+  public List<OnSiteExperience> findAllWithSorting(Sort sort) {
+    Query query = new Query();
+    query.with(sort);
+    return mongoTemplate.find(query, OnSiteExperience.class);
+
   }
 }

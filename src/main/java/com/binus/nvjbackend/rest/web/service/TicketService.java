@@ -11,6 +11,8 @@ public interface TicketService {
 
   Ticket create(TicketRequest request);
 
+  List<Ticket> findAllWithSorting(String orderBy, String sortBy);
+
   Page<Ticket> findByFilter(Integer page, Integer size, String orderBy, String sortBy,
       TicketFilterRequest request, Boolean isClientApi);
 
