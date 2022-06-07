@@ -22,4 +22,15 @@ public interface MongoFieldNames {
   // On-Site Experience
   String EXPERIENCE_ID = "id";
   String EXPERIENCE_TITLE = "title";
+
+  // Order
+  String ORDER_ID = "id";
+  String ORDER_FIRSTNAME = "firstname";
+  String ORDER_LASTNAME = "lastname";
+  String ORDER_EMAIL = "email";
+  String ORDER_PHONE_NUMBER = "phoneNumber";
+  String ORDER_PAYMENT_TYPE = "paymentType";
+  String ORDER_IS_MANUAL_ORDER = "isManualOrder";
+  String ORDER_MIDTRANS_ORDER_ID = "midtrans.orderId";
+  String ORDER_MIDTRANS_TRANSACTION_STATUS = "midtrans.transactionStatus";
 }

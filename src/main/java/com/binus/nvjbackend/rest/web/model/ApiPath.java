@@ -84,5 +84,7 @@ public class ApiPath {
 
   public static final String ORDER_CREATE = "/create";
 
+  public static final String ORDER_FIND_BY_FILTER = "/findByFilter";
+
   public static final String ORDER_FIND_ALL = "/findAll";
 }

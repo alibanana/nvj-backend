@@ -7,6 +7,7 @@ import com.binus.nvjbackend.model.enums.ErrorCode;
 import com.binus.nvjbackend.model.exception.BaseException;
 import com.binus.nvjbackend.repository.OrderRepository;
 import com.binus.nvjbackend.rest.web.model.request.order.OrderClientRequest;
+import com.binus.nvjbackend.rest.web.model.request.order.OrderFilterRequest;
 import com.binus.nvjbackend.rest.web.model.request.order.OrderRequest;
 import com.binus.nvjbackend.rest.web.util.DateUtil;
 import com.binus.nvjbackend.rest.web.util.OtherUtil;
@@ -15,6 +16,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.Hashing;
 import com.midtrans.httpclient.error.MidtransError;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -105,6 +108,16 @@ public class OrderServiceImpl implements OrderService {
   @Override
   public List<Order> findAll() {
     return orderRepository.findAll();
+  }
+
+  @Override
+  public Page<Order> findByFilter(Integer page, Integer size, String orderBy, String sortBy,
+      OrderFilterRequest request) {
+    PageRequest pageRequest = otherUtil.validateAndGetPageRequest(page, size, orderBy, sortBy);
+    return orderRepository.findAllByIdAndFirstnameAndLastnameAndEmailAndPhoneNumberAndPaymentTypeAndManualOrderEqualsAndMidtransOrderIdAndMidtransTransactionStatus(
+        request.getId(), request.getFirstname(), request.getLastname(), request.getEmail(),
+        request.getPhoneNumber(), request.getPaymentType(), request.getIsManualOrder(),
+        request.getMidtransOrderId(), request.getMidtransTransactionStatus(), pageRequest);
   }
 
   private void validateVisitDate(Date date) {
