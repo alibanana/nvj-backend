@@ -27,5 +27,20 @@ public class OrderResponse implements Serializable {
   private String phoneNumber;
   private Date visitDate;
   private Double totalPrice;
+  private String paymentType;
+  private Boolean isManualOrder;
   private List<OrderItemResponse> orderItems;
+  private Midtrans midtrans;
+
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  @Builder
+  @JsonIgnoreProperties(ignoreUnknown = true)
+  public static class Midtrans {
+    private String orderId;
+    private String token;
+    private String redirectUrl;
+    private String transactionStatus;
+  }
 }

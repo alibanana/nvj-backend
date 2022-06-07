@@ -6,6 +6,7 @@ import com.binus.nvjbackend.rest.web.model.request.order.OrderRequest;
 import com.midtrans.httpclient.error.MidtransError;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
 
 public interface OrderService {
@@ -19,4 +20,6 @@ public interface OrderService {
   void handleNotification(Map<String, Object> requestBody) throws ParseException;
 
   Order findByMidtransOrderId(String midtransOrderId);
+
+  List<Order> findAll();
 }

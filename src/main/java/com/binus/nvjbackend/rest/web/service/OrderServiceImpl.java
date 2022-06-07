@@ -102,6 +102,11 @@ public class OrderServiceImpl implements OrderService {
     return order;
   }
 
+  @Override
+  public List<Order> findAll() {
+    return orderRepository.findAll();
+  }
+
   private void validateVisitDate(Date date) {
     if (dateUtil.isDateBeforeToday(date)) {
       throw new BaseException(ErrorCode.ORDER_VISIT_DATE_BEFORE_TODAY);

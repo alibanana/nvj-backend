@@ -7,6 +7,7 @@ import com.binus.nvjbackend.rest.web.model.ApiPath;
 import com.binus.nvjbackend.rest.web.model.request.order.OrderRequest;
 import com.binus.nvjbackend.rest.web.model.response.OrderItemResponse;
 import com.binus.nvjbackend.rest.web.model.response.OrderResponse;
+import com.binus.nvjbackend.rest.web.model.response.rest.RestListResponse;
 import com.binus.nvjbackend.rest.web.model.response.rest.RestSingleResponse;
 import com.binus.nvjbackend.rest.web.service.OrderService;
 import io.swagger.annotations.Api;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.text.ParseException;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Api(value = "Orders", description = "Orders Service API")
@@ -35,12 +36,23 @@ public class OrderController extends BaseController {
     return toSingleResponse(toOrderResponse(order));
   }
 
+  @PostMapping(value = ApiPath.ORDER_FIND_ALL)
+  public RestListResponse<OrderResponse> findAll() {
+    List<Order> orders = orderService.findAll();
+    return toListResponse(orders.stream()
+        .map(this::toOrderResponse)
+        .collect(Collectors.toList()));
+  }
+
   private OrderResponse toOrderResponse(Order order) {
     OrderResponse orderResponse = new OrderResponse();
     BeanUtils.copyProperties(order, orderResponse);
     orderResponse.setOrderItems(order.getOrderItems().stream()
         .map(this::toOrderItemResponse)
         .collect(Collectors.toList()));
+    if (!order.getIsManualOrder()) {
+      orderResponse.setMidtrans(toMidtransResponse(order.getMidtrans()));
+    }
     return orderResponse;
   }
 
@@ -51,5 +63,11 @@ public class OrderController extends BaseController {
         .quantity(orderItem.getQuantity())
         .price(orderItem.getPrice())
         .build();
+  }
+
+  private OrderResponse.Midtrans toMidtransResponse(Order.Midtrans midtrans) {
+    OrderResponse.Midtrans midtransResponse = new OrderResponse.Midtrans();
+    BeanUtils.copyProperties(midtrans, midtransResponse);
+    return midtransResponse;
   }
 }
