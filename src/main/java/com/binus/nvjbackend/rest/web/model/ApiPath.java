@@ -24,6 +24,8 @@ public class ApiPath {
 
   public static final String BASE_PATH_USER = BASE_PATH_API + "/users";
 
+  public static final String USER_FIND_BY_FILTER = "/findByFilter";
+
   public static final String CURRENT_USER_DETAILS = "/getCurrentUserDetails";
 
   public static final String BASE_PATH_SYSTEM_PARAMETER = BASE_PATH_API + "/systemparameters";

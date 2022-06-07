@@ -13,6 +13,8 @@ public interface RoleService {
 
   Role findByName(String name);
 
+  Role findByRoleType(String roleType);
+
   void updateByRoleType(RoleRequest request);
 
   void deleteByName(String name);

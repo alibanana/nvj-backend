@@ -44,6 +44,13 @@ public class RoleServiceImpl implements RoleService {
   }
 
   @Override
+  public Role findByRoleType(String roleType) {
+    Role role = roleRepository.findByRoleType(roleType);
+    roleUtil.validateRoleNotNull(role);
+    return role;
+  }
+
+  @Override
   public void updateByRoleType(RoleRequest request) {
     roleUtil.validateRoleType(request.getRoleType());
     Role role = roleRepository.findByRoleType(request.getRoleType());
