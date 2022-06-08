@@ -3,9 +3,11 @@ package com.binus.nvjbackend.rest.web.controller.server;
 import com.binus.nvjbackend.model.entity.User;
 import com.binus.nvjbackend.rest.web.controller.BaseController;
 import com.binus.nvjbackend.rest.web.model.ApiPath;
+import com.binus.nvjbackend.rest.web.model.request.user.UserChangePasswordRequest;
 import com.binus.nvjbackend.rest.web.model.request.user.UserFilterRequest;
 import com.binus.nvjbackend.rest.web.model.response.RoleResponse;
 import com.binus.nvjbackend.rest.web.model.response.UserResponse;
+import com.binus.nvjbackend.rest.web.model.response.rest.RestBaseResponse;
 import com.binus.nvjbackend.rest.web.model.response.rest.RestPageResponse;
 import com.binus.nvjbackend.rest.web.model.response.rest.RestSingleResponse;
 import com.binus.nvjbackend.rest.web.service.UserService;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -52,6 +55,14 @@ public class UserController extends BaseController {
   public RestSingleResponse<UserResponse> getCurrentUserDetails(HttpServletRequest request) {
     String token = request.getHeader("Authorization").substring(7);
     User user = userService.getCurrentUserDetails(token);
+    return toSingleResponse(toUserResponse(user, token));
+  }
+
+  @PostMapping(value = ApiPath.USER_CHANGE_PASSWORD)
+  public RestBaseResponse changePassword(HttpServletRequest httpServletRequest,
+      @Valid @RequestBody UserChangePasswordRequest request) {
+    String token = httpServletRequest.getHeader("Authorization").substring(7);
+    User user = userService.changePassword(token, request);
     return toSingleResponse(toUserResponse(user, token));
   }
 

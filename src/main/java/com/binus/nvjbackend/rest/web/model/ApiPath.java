@@ -28,6 +28,8 @@ public class ApiPath {
 
   public static final String CURRENT_USER_DETAILS = "/getCurrentUserDetails";
 
+  public static final String USER_CHANGE_PASSWORD = "/changePassword";
+
   public static final String BASE_PATH_SYSTEM_PARAMETER = BASE_PATH_API + "/systemparameters";
 
   public static final String SYSTEM_PARAMETER_INSERT = "/insert";

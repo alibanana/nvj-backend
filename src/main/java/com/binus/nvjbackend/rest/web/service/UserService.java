@@ -1,6 +1,7 @@
 package com.binus.nvjbackend.rest.web.service;
 
 import com.binus.nvjbackend.model.entity.User;
+import com.binus.nvjbackend.rest.web.model.request.user.UserChangePasswordRequest;
 import com.binus.nvjbackend.rest.web.model.request.user.UserFilterRequest;
 import org.springframework.data.domain.Page;
 
@@ -13,4 +14,6 @@ public interface UserService {
       UserFilterRequest request);
 
   User getCurrentUserDetails(String token);
+
+  User changePassword(String token, UserChangePasswordRequest request);
 }

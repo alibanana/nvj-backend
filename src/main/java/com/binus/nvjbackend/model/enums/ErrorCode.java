@@ -34,11 +34,17 @@ public enum ErrorCode {
       "One or more of the tickets requested are not purchasable"),
   ORDER_VISIT_DATE_BEFORE_TODAY("ERR-PA40016", 400,
       "Visit Date must be greater than or equal to today"),
+  PASSWORD_AND_NEW_PASSWORD_SAME("ERR-PA40017", 400,
+      "New password must be different than the old password"),
+  NEW_PASSWORD_AND_CONFIRM_PASSWORD_DIFFERENT("ERR-PA40018", 400,
+      "New password and confirm new password must be the same"),
 
   USER_CREDENTIALS_INVALID("ERR-PA40101", 401,
       "The requested username and password is invalid"),
   ORDER_SIGNATURE_KEY_INVALID("ERR-PA40102", 401,
       "The requested signature_key is invalid"),
+  USER_PASSWORD_INVALID("ERR-PA40103", 401,
+      "The requested user password is invalid"),
 
   ROLE_NOT_FOUND("ERR-PA40401", 404,
       "The requested role doesn't exists"),
@@ -54,6 +60,8 @@ public enum ErrorCode {
       "The requested on-site experience does not exists"),
   MIDTRANS_ORDER_ID_NOT_FOUND("ERR-PA40407", 404,
       "The requested midtrans-orderId does not exists"),
+  USER_NOT_FOUND("ERR-PA40408", 404,
+      "The requested user does not exists"),
 
   FILE_DELETION_FAILED("ERR-PA40901", 409,
       "The requested file cannot be deleted"),
