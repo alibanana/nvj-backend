@@ -11,6 +11,7 @@ import com.binus.nvjbackend.rest.web.model.response.rest.RestBaseResponse;
 import com.binus.nvjbackend.rest.web.model.response.rest.RestSingleResponse;
 import com.binus.nvjbackend.rest.web.service.OrderService;
 import com.midtrans.httpclient.error.MidtransError;
+import freemarker.template.TemplateException;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Map;
 import java.util.Objects;
@@ -35,7 +38,8 @@ public class OrderClientController extends BaseController {
 
   @PostMapping(value = ApiPathClient.ORDER_CREATE)
   public RestSingleResponse<OrderClientResponse> createOrderClient(
-      @Valid @RequestBody OrderClientRequest request) throws MidtransError {
+      @Valid @RequestBody OrderClientRequest request) throws MidtransError, TemplateException,
+      MessagingException, IOException {
     Order order = orderService.createClientOrder(request);
     return toSingleResponse(toOrderClientResponse(order));
   }

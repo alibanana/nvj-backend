@@ -16,12 +16,19 @@ public class DateUtil {
   private static final SimpleDateFormat DATE_ONLY_FORMATTER =
       new SimpleDateFormat("yyyy-MM-dd");
 
+  private static final SimpleDateFormat DATE_ONLY_FORMATTER_REVERSE =
+      new SimpleDateFormat("dd-MM-yyyy");
+
   public Date toDateFromMidtrans(String dateInput) throws ParseException {
     return Objects.nonNull(dateInput) ? MIDTRANS_DATETIME_FORMATTER.parse(dateInput) : null;
   }
 
   public String toDateOnlyFormat(Date date) {
     return DATE_ONLY_FORMATTER.format(date);
+  }
+
+  public String toReversedDateOnlyFormat(Date date) {
+    return DATE_ONLY_FORMATTER_REVERSE.format(date);
   }
 
   public Boolean isDateBeforeToday(Date date) {

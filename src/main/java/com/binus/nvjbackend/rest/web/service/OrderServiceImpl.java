@@ -3,6 +3,7 @@ package com.binus.nvjbackend.rest.web.service;
 import com.binus.nvjbackend.config.properties.SysparamProperties;
 import com.binus.nvjbackend.model.entity.Order;
 import com.binus.nvjbackend.model.entity.OrderItem;
+import com.binus.nvjbackend.model.entity.TicketArchive;
 import com.binus.nvjbackend.model.enums.ErrorCode;
 import com.binus.nvjbackend.model.exception.BaseException;
 import com.binus.nvjbackend.repository.OrderRepository;
@@ -10,23 +11,27 @@ import com.binus.nvjbackend.rest.web.model.request.order.OrderClientRequest;
 import com.binus.nvjbackend.rest.web.model.request.order.OrderFilterRequest;
 import com.binus.nvjbackend.rest.web.model.request.order.OrderRequest;
 import com.binus.nvjbackend.rest.web.util.DateUtil;
+import com.binus.nvjbackend.rest.web.util.EmailTemplateUtil;
 import com.binus.nvjbackend.rest.web.util.OtherUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.Hashing;
 import com.midtrans.httpclient.error.MidtransError;
+import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -45,6 +50,12 @@ public class OrderServiceImpl implements OrderService {
   private MidtransService midtransService;
 
   @Autowired
+  private TicketArchiveService ticketArchiveService;
+
+  @Autowired
+  private EmailTemplateService emailTemplateService;
+
+  @Autowired
   private OrderRepository orderRepository;
 
   @Autowired
@@ -53,13 +64,13 @@ public class OrderServiceImpl implements OrderService {
   @Autowired
   private OtherUtil otherUtil;
 
-  private MessageDigest md;
+  @Autowired
+  private EmailTemplateUtil emailTemplateUtil;
 
   private ObjectMapper oMapper;
 
   @PostConstruct
   public void init() throws NoSuchAlgorithmException {
-    md = MessageDigest.getInstance("SHA-512");
     oMapper = new ObjectMapper();
   }
 
@@ -72,12 +83,19 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public Order createClientOrder(OrderClientRequest request) throws MidtransError {
+  public Order createClientOrder(OrderClientRequest request) throws MidtransError,
+      TemplateException, MessagingException, IOException {
     otherUtil.validatePhoneNumber(request.getPhoneNumber());
     validateVisitDate(request.getVisitDate());
     List<OrderItem> orderItems = orderItemService.createOrderItems(request.getOrderItems());
     Order.Midtrans midtrans = midtransService.createTransaction(request, orderItems);
-    return orderRepository.save(buildClientOrder(request, orderItems, midtrans));
+    Order order = orderRepository.save(buildClientOrder(request, orderItems, midtrans));
+    Map<String, TicketArchive> ticketIdAndTicketArchiveMap =
+        ticketArchiveService.findTicketArchivesByTicketIdAndVersionMap(
+            generateTicketIdAndVersionMap(order));
+    emailTemplateService.sendEmailTemplate(
+        emailTemplateUtil.buildWaitingForPaymentEmail(order, ticketIdAndTicketArchiveMap));
+    return order;
   }
 
   @Override
@@ -93,7 +111,7 @@ public class OrderServiceImpl implements OrderService {
       throw new BaseException(ErrorCode.MIDTRANS_ORDER_ID_NOT_FOUND);
     }
     validateSignatureKey(requestBody, order);
-    updateOrderToMongo(requestBody, order);
+    Order updatedOrder = updateOrderToMongo(requestBody, order);
   }
 
   @Override
@@ -156,6 +174,14 @@ public class OrderServiceImpl implements OrderService {
         .build();
   }
 
+  private Map<String, Integer> generateTicketIdAndVersionMap(Order order) {
+    Map<String, Integer> map = new HashMap<>();
+    for (OrderItem orderItem : order.getOrderItems()) {
+      map.put(orderItem.getTicket().getId(), orderItem.getTicketVersion());
+    }
+    return map;
+  }
+
   private Double getTotalPrice(List<OrderItem> orderItems) {
     return orderItems.stream()
         .map(orderItem -> orderItem.getPrice() * orderItem.getQuantity())
@@ -180,7 +206,7 @@ public class OrderServiceImpl implements OrderService {
     }
   }
 
-  private void updateOrderToMongo(Map<String, Object> requestBody, Order order)
+  private Order updateOrderToMongo(Map<String, Object> requestBody, Order order)
       throws ParseException {
     Order.Midtrans midtrans = order.getMidtrans();
     midtrans.setTransactionTime(
@@ -217,7 +243,7 @@ public class OrderServiceImpl implements OrderService {
     midtrans.setVaNumbers(toVaNumbers(requestBody.getOrDefault("va_numbers", new ArrayList<>())));
     midtrans.setPaymentAmounts(toPaymentAmounts(
         requestBody.getOrDefault("payment_amounts", new ArrayList<>())));
-    orderRepository.save(order);
+    return orderRepository.save(order);
   }
 
   private List<Order.Midtrans.VaNumber> toVaNumbers(Object vaNumbers) {

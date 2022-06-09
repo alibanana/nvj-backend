@@ -41,4 +41,7 @@ public class SysparamProperties {
 
   @Value("${sysparam.midtrans.is-production}")
   private Boolean midtransIsProduction;
+
+  @Value("${sysparam.client.link.payment-status}")
+  private String clientPaymentStatusLink;
 }
