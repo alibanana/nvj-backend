@@ -26,4 +26,5 @@ public class LoginResponse implements Serializable {
   private String phoneNumber;
   private String placeOfBirth;
   private String dateOfBirth;
+  private String roleName;
 }

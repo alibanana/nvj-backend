@@ -60,6 +60,7 @@ public class AuthenticationController extends BaseController {
         .phoneNumber(userDetails.getPhoneNumber())
         .placeOfBirth(userDetails.getPlaceOfBirth())
         .dateOfBirth(dateUtil.toDateOnlyFormat(userDetails.getDateOfBirth()))
+        .roleName(userDetails.getRoleName())
         .build();
   }
 

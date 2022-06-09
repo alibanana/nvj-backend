@@ -32,6 +32,7 @@ public class UserDetailsImpl implements UserDetails {
   private String phoneNumber;
   private String placeOfBirth;
   private Date dateOfBirth;
+  private String roleName;
 
   private Collection<? extends GrantedAuthority> authorities;
 

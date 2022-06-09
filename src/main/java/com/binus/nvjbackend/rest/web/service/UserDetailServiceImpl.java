@@ -33,6 +33,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         .phoneNumber(user.getPhoneNumber())
         .placeOfBirth(user.getPlaceOfBirth())
         .dateOfBirth(user.getDateOfBirth())
+        .roleName(user.getRole().getName())
         .build();
   }
 

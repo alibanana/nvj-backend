@@ -10,6 +10,7 @@ import com.binus.nvjbackend.repository.UserRepository;
 import com.binus.nvjbackend.rest.web.model.request.authentication.LoginRequest;
 import com.binus.nvjbackend.rest.web.model.request.authentication.RegisterRequest;
 import com.binus.nvjbackend.rest.web.util.OtherUtil;
+import com.binus.nvjbackend.rest.web.util.PasswordUtil;
 import com.binus.nvjbackend.rest.web.util.RoleUtil;
 import com.google.zxing.WriterException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   private OtherUtil otherUtil;
 
   @Autowired
+  private PasswordUtil passwordUtil;
+
+  @Autowired
   private SysparamProperties sysparamProperties;
 
   @Autowired
@@ -83,6 +87,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     } else if (userRepository.existsByEmail(registerRequest.getEmail())) {
       throw new BaseException(ErrorCode.EMAIL_ALREADY_EXISTS);
     }
+    passwordUtil.validatePasswordValid(registerRequest.getPassword());
     otherUtil.validatePhoneNumber(registerRequest.getPhoneNumber());
     roleUtil.validateRoleType(registerRequest.getRoleType());
     saveNewUser(registerRequest);

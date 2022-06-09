@@ -8,6 +8,7 @@ import com.binus.nvjbackend.rest.web.model.request.user.UserChangePasswordReques
 import com.binus.nvjbackend.rest.web.model.request.user.UserFilterRequest;
 import com.binus.nvjbackend.rest.web.util.JwtUtil;
 import com.binus.nvjbackend.rest.web.util.OtherUtil;
+import com.binus.nvjbackend.rest.web.util.PasswordUtil;
 import com.binus.nvjbackend.rest.web.util.RoleUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,6 +42,9 @@ public class UserServiceImpl implements UserService {
   private RoleUtil roleUtil;
 
   @Autowired
+  private PasswordUtil passwordUtil;
+
+  @Autowired
   private UserRepository userRepository;
 
   @Autowired
@@ -72,6 +76,7 @@ public class UserServiceImpl implements UserService {
     }
     validateUsernameAndPassword(username, request.getPassword());
     validatePasswordRequest(username, request);
+    passwordUtil.validatePasswordValid(request.getNewPassword());
     user.setPassword(encoder.encode(request.getNewPassword()));
     return userRepository.save(user);
   }
