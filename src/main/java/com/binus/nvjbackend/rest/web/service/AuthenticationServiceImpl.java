@@ -9,10 +9,13 @@ import com.binus.nvjbackend.repository.RoleRepository;
 import com.binus.nvjbackend.repository.UserRepository;
 import com.binus.nvjbackend.rest.web.model.request.authentication.LoginRequest;
 import com.binus.nvjbackend.rest.web.model.request.authentication.RegisterRequest;
+import com.binus.nvjbackend.rest.web.util.EmailTemplateUtil;
 import com.binus.nvjbackend.rest.web.util.OtherUtil;
 import com.binus.nvjbackend.rest.web.util.PasswordUtil;
 import com.binus.nvjbackend.rest.web.util.RoleUtil;
 import com.google.zxing.WriterException;
+import freemarker.template.TemplateException;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -24,8 +27,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 @Service
@@ -53,6 +58,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   private PasswordUtil passwordUtil;
 
   @Autowired
+  private EmailTemplateUtil emailTemplateUtil;
+
+  @Autowired
   private SysparamProperties sysparamProperties;
 
   @Autowired
@@ -63,6 +71,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
   @Autowired
   private ImageService imageService;
+
+  @Autowired
+  private EmailTemplateService emailTemplateService;
 
   @Override
   public UserDetails login(LoginRequest loginRequest) {
@@ -91,6 +102,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     otherUtil.validatePhoneNumber(registerRequest.getPhoneNumber());
     roleUtil.validateRoleType(registerRequest.getRoleType());
     saveNewUser(registerRequest);
+  }
+
+  @Override
+  public void passwordRecovery(String username) throws TemplateException, MessagingException,
+      IOException {
+    User user = userRepository.findByUsername(username);
+    if (Objects.isNull(user)) {
+      throw new BaseException(ErrorCode.USER_NOT_FOUND);
+    }
+    String newPassword = RandomStringUtils.random(10, true, true);
+    user.setPassword(encoder.encode(newPassword));
+    userRepository.save(user);
+    emailTemplateService.sendEmailTemplate(
+        emailTemplateUtil.buildForgetPasswordEmail(user.getEmail(), newPassword));
   }
 
   private void saveNewUser(RegisterRequest request) throws IOException, WriterException {

@@ -12,22 +12,28 @@ import com.binus.nvjbackend.rest.web.service.UserDetailsImpl;
 import com.binus.nvjbackend.rest.web.util.DateUtil;
 import com.binus.nvjbackend.rest.web.util.JwtUtil;
 import com.google.zxing.WriterException;
+import freemarker.template.TemplateException;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.io.IOException;
 
 @Api(value = "Authentication", description = "Authentication Service API")
 @RestController
 @RequestMapping(value = ApiPath.BASE_PATH_AUTHENTICATION)
+@Validated
 public class AuthenticationController extends BaseController {
 
   @Autowired
@@ -77,5 +83,12 @@ public class AuthenticationController extends BaseController {
     return ResponseEntity.ok()
         .header(HttpHeaders.SET_COOKIE, cookie.toString())
         .body(toBaseResponse());
+  }
+
+  @PostMapping(value = ApiPath.PASSWORD_RECOVERY)
+  public RestBaseResponse passwordRecovery(@NotBlank @RequestParam String username)
+      throws TemplateException, MessagingException, IOException {
+    authenticationService.passwordRecovery(username);
+    return toBaseResponse();
   }
 }

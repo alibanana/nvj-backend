@@ -6,6 +6,7 @@ import com.binus.nvjbackend.model.entity.OrderItem;
 import com.binus.nvjbackend.model.entity.TicketArchive;
 import com.binus.nvjbackend.model.enums.EmailTemplateNames;
 import com.binus.nvjbackend.rest.web.model.request.emailtemplate.EmailTemplateSendRequest;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,16 @@ public class EmailTemplateUtil {
 
   @Autowired
   private DateUtil dateUtil;
+
+  public EmailTemplateSendRequest buildForgetPasswordEmail(String email, String newPassword) {
+    Map<String, Object> content = new HashMap<>();
+    content.put("new_password", newPassword);
+    return EmailTemplateSendRequest.builder()
+        .to(email)
+        .templateName(EmailTemplateNames.FORGET_PASSWORD)
+        .templateKeyAndValues(content)
+        .build();
+  }
 
   public EmailTemplateSendRequest buildWaitingForPaymentEmail(Order order,
       Map<String, TicketArchive> ticketIdAndTicketArchiveMap) {
@@ -64,7 +75,7 @@ public class EmailTemplateUtil {
         .build();
   }
 
-  public Map<String, Object> buildPaymentSuccessAndExpiredEmailTemplateKeyAndValues(Order order,
+  private Map<String, Object> buildPaymentSuccessAndExpiredEmailTemplateKeyAndValues(Order order,
       Map<String, TicketArchive> ticketIdAndTicketArchiveMap) {
     Map<String, Object> content =
         buildEmailTemplateKeyAndValues(order, ticketIdAndTicketArchiveMap);
