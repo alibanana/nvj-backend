@@ -8,6 +8,7 @@ import com.binus.nvjbackend.rest.web.model.request.user.UserFilterRequest;
 import com.binus.nvjbackend.rest.web.model.response.RoleResponse;
 import com.binus.nvjbackend.rest.web.model.response.UserResponse;
 import com.binus.nvjbackend.rest.web.model.response.rest.RestBaseResponse;
+import com.binus.nvjbackend.rest.web.model.response.rest.RestListResponse;
 import com.binus.nvjbackend.rest.web.model.response.rest.RestPageResponse;
 import com.binus.nvjbackend.rest.web.model.response.rest.RestSingleResponse;
 import com.binus.nvjbackend.rest.web.service.UserService;
@@ -15,6 +16,8 @@ import com.binus.nvjbackend.rest.web.util.DateUtil;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,6 +35,7 @@ import java.util.stream.Collectors;
 @Api(value = "User", description = "User Service API")
 @RestController
 @RequestMapping(value = ApiPath.BASE_PATH_USER)
+@Validated
 public class UserController extends BaseController {
 
   @Autowired
@@ -50,6 +55,27 @@ public class UserController extends BaseController {
         .collect(Collectors.toList());
     return toPageResponse(userResponses, users);
   }
+
+  @PostMapping(value = ApiPath.USER_FIND_ALL)
+  public RestListResponse<UserResponse> findAll() {
+    List<User> users = userService.findAll();
+    return toListResponse(users.stream()
+        .map(this::toUserResponse)
+        .collect(Collectors.toList()));
+  }
+
+  @PostMapping(value = ApiPath.USER_FIND_BY_ID)
+  public RestSingleResponse<UserResponse> findById(@NotBlank @RequestParam String id) {
+    User user = userService.findById(id);
+    return toSingleResponse(toUserResponse(user));
+  }
+
+  @DeleteMapping(value = ApiPath.USER_DELETE_BY_ID)
+  public RestBaseResponse deleteById(@NotBlank @RequestParam String id) {
+    userService.deleteById(id);
+    return toBaseResponse();
+  }
+
 
   @PostMapping(value = ApiPath.CURRENT_USER_DETAILS)
   public RestSingleResponse<UserResponse> getCurrentUserDetails(HttpServletRequest request) {

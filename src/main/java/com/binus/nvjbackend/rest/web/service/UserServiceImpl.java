@@ -21,7 +21,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -50,6 +52,9 @@ public class UserServiceImpl implements UserService {
   @Autowired
   private RoleService roleService;
 
+  @Autowired
+  private ImageService imageService;
+
   @Override
   public Page<User> findByFilter(Integer page, Integer size, String orderBy, String sortBy,
       UserFilterRequest request) {
@@ -59,6 +64,32 @@ public class UserServiceImpl implements UserService {
         request.getId(), request.getFirstname(), request.getLastname(), request.getUsername(),
         request.getEmail(), request.getPhoneNumber(), request.getPlaceOfBirth(), roleId,
         pageRequest);
+  }
+
+  @Override
+  public List<User> findAll() {
+    return userRepository.findAll();
+  }
+
+  @Override
+  public User findById(String id) {
+    User user = Optional.of(userRepository.findById(id)).get()
+        .orElse(null);
+    if (Objects.isNull(user)) {
+      throw new BaseException(ErrorCode.USER_NOT_FOUND);
+    }
+    return user;
+  }
+
+  @Override
+  public void deleteById(String id) {
+    User user = Optional.of(userRepository.findById(id)).get()
+        .orElse(null);
+    if (Objects.isNull(user)) {
+      throw new BaseException(ErrorCode.USER_NOT_FOUND);
+    }
+    imageService.deleteById(user.getQrCodeImage().getId());
+    userRepository.deleteById(id);
   }
 
   @Override

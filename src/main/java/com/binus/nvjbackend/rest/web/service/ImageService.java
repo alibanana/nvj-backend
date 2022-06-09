@@ -14,5 +14,7 @@ public interface ImageService {
 
   void deleteImage(String filename);
 
+  void deleteById(String id);
+
   Image validateAndStoreImageToMongo(Path path);
 }

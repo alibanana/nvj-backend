@@ -13,6 +13,12 @@ public interface UserService {
   Page<User> findByFilter(Integer page, Integer size, String orderBy, String sortBy,
       UserFilterRequest request);
 
+  List<User> findAll();
+
+  User findById(String id);
+
+  void deleteById(String id);
+
   User getCurrentUserDetails(String token);
 
   User changePassword(String token, UserChangePasswordRequest request);

@@ -70,6 +70,8 @@ public enum ErrorCode {
       "The requested midtrans-orderId does not exists"),
   USER_NOT_FOUND("ERR-PA40408", 404,
       "The requested user does not exists"),
+  IMAGE_NOT_FOUND("ERR-PA40409", 404,
+      "The requested image does not exists"),
 
   FILE_DELETION_FAILED("ERR-PA40901", 409,
       "The requested file cannot be deleted"),

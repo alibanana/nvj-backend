@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.URLConnection;
 import java.nio.file.Path;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,6 +52,18 @@ public class ImageServiceImpl implements ImageService {
     fileStorageService.validateFileExistsByFilename(filename);
     fileStorageService.removeFile(filename);
     imageRepository.deleteByName(filename);
+  }
+
+  @Override
+  public void deleteById(String id) {
+    Image image = Optional.of(imageRepository.findById(id)).get()
+        .orElse(null);
+    if (Objects.isNull(image)) {
+      throw new BaseException(ErrorCode.IMAGE_NOT_FOUND);
+    }
+    fileStorageService.validateFileExistsByFilename(image.getName());
+    fileStorageService.removeFile(image.getName());
+    imageRepository.deleteById(id);
   }
 
   @Override

@@ -88,6 +88,7 @@ public class EmailTemplateUtil {
     content.put("orderItems", orderItemList);
     content.put("order_id", order.getMidtrans().getOrderId());
     content.put("visit_date", dateUtil.toReversedDateOnlyFormat(order.getVisitDate()));
+    content.put("grand_total", order.getTotalPrice());
     return content;
   }
 }
