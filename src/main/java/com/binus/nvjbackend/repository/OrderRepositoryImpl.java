@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,10 +22,10 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
   private MongoTemplate mongoTemplate;
 
   @Override
-  public Page<Order> findAllByIdAndFirstnameAndLastnameAndEmailAndPhoneNumberAndPaymentTypeAndManualOrderEqualsAndMidtransOrderIdAndMidtransTransactionStatus(
-      String id, String firstname, String lastname, String email, String phoneNumber,
-      String paymentType, Boolean isManualOrder, String midtransOrderId,
-      String midtransTransactionStatus, PageRequest pageRequest) {
+  public Page<Order> findAllByFilter(String id, String firstname, String lastname, String email,
+      String phoneNumber, Date fromVisitDate, Date toVisitDate, String paymentType,
+      Boolean isManualOrder, String midtransOrderId, String midtransTransactionStatus,
+      PageRequest pageRequest) {
     Query query = new Query();
 
     if (Objects.nonNull(id) && StringUtils.hasText(id)) {
@@ -50,6 +51,21 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     if (Objects.nonNull(phoneNumber) && StringUtils.hasText(phoneNumber)) {
       query.addCriteria(where(MongoFieldNames.ORDER_PHONE_NUMBER)
           .regex(String.format(".*%s.*", phoneNumber), "i"));
+    }
+
+    if (Objects.nonNull(fromVisitDate) && Objects.isNull(toVisitDate)) {
+      query.addCriteria(where(MongoFieldNames.ORDER_VISIT_DATE)
+          .gte(fromVisitDate));
+    }
+
+    if (Objects.nonNull(toVisitDate) && Objects.isNull(fromVisitDate)) {
+      query.addCriteria(where(MongoFieldNames.ORDER_VISIT_DATE)
+          .lte(toVisitDate));
+    }
+
+    if (Objects.nonNull(fromVisitDate) && Objects.nonNull(toVisitDate)) {
+      query.addCriteria(where(MongoFieldNames.ORDER_VISIT_DATE)
+          .gte(fromVisitDate).lte(toVisitDate));
     }
 
     if (Objects.nonNull(paymentType) && StringUtils.hasText(paymentType)) {

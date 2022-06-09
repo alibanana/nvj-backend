@@ -29,6 +29,7 @@ public interface MongoFieldNames {
   String ORDER_LASTNAME = "lastname";
   String ORDER_EMAIL = "email";
   String ORDER_PHONE_NUMBER = "phoneNumber";
+  String ORDER_VISIT_DATE = "visitDate";
   String ORDER_PAYMENT_TYPE = "paymentType";
   String ORDER_IS_MANUAL_ORDER = "isManualOrder";
   String ORDER_MIDTRANS_ORDER_ID = "midtrans.orderId";

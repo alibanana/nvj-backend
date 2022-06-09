@@ -3,6 +3,7 @@ package com.binus.nvjbackend.rest.web.controller.client;
 import com.binus.nvjbackend.model.entity.Order;
 import com.binus.nvjbackend.model.entity.OrderItem;
 import com.binus.nvjbackend.rest.web.controller.BaseController;
+import com.binus.nvjbackend.rest.web.model.ApiPath;
 import com.binus.nvjbackend.rest.web.model.ApiPathClient;
 import com.binus.nvjbackend.rest.web.model.request.order.OrderClientRequest;
 import com.binus.nvjbackend.rest.web.model.response.OrderClientResponse;
@@ -46,7 +47,7 @@ public class OrderClientController extends BaseController {
 
   @PostMapping(ApiPathClient.ORDER_HANDLE_NOTIFICATION)
   public RestBaseResponse handleNotification(@RequestBody Map<String, Object> requestBody)
-      throws ParseException {
+      throws ParseException, TemplateException, MessagingException, IOException {
     orderService.handleNotification(requestBody);
     return toBaseResponse();
   }
@@ -56,6 +57,13 @@ public class OrderClientController extends BaseController {
       @RequestParam String midtransOrderId) {
     Order order = orderService.findByMidtransOrderId(midtransOrderId);
     return toSingleResponse(toOrderClientResponse(order));
+  }
+
+  @PostMapping(value = ApiPathClient.RESEND_EMAIL_BY_MIDTRANS_ORDER_ID)
+  public RestBaseResponse resendEmailByMidtransOrderId(@RequestParam String midtransOrderId)
+      throws TemplateException, MessagingException, IOException {
+    orderService.resendEmailByMidtransOrderId(midtransOrderId);
+    return toBaseResponse();
   }
 
   private OrderClientResponse toOrderClientResponse(Order order) {

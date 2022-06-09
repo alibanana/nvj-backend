@@ -35,8 +35,47 @@ public class EmailTemplateUtil {
 
   private Map<String, Object> buildWaitingForPaymentEmailTemplateKeyAndValues(Order order,
       Map<String, TicketArchive> ticketIdAndTicketArchiveMap) {
-    Map<String, Object> content = new HashMap<>();
+    Map<String, Object> content =
+        buildEmailTemplateKeyAndValues(order, ticketIdAndTicketArchiveMap);
+    String paymentStatusUrl = sysparamProperties.getClientPaymentStatusLink() + "?order_id=" +
+        order.getMidtrans().getOrderId();
+    content.put("payment_status_url", paymentStatusUrl);
+    content.put("link_to_snap_payment", order.getMidtrans().getRedirectUrl());
+    return content;
+  }
 
+  public EmailTemplateSendRequest buildPaymentSuccessEmail(Order order,
+      Map<String, TicketArchive> ticketIdAndTicketArchiveMap) {
+    return EmailTemplateSendRequest.builder()
+        .to(order.getEmail())
+        .templateName(EmailTemplateNames.PAYMENT_SUCCESS)
+        .templateKeyAndValues(buildPaymentSuccessAndExpiredEmailTemplateKeyAndValues(
+            order, ticketIdAndTicketArchiveMap))
+        .build();
+  }
+
+  public EmailTemplateSendRequest buildPaymentExpiredEmail(Order order,
+      Map<String, TicketArchive> ticketIdAndTicketArchiveMap) {
+    return EmailTemplateSendRequest.builder()
+        .to(order.getEmail())
+        .templateName(EmailTemplateNames.PAYMENT_EXPIRED)
+        .templateKeyAndValues(buildPaymentSuccessAndExpiredEmailTemplateKeyAndValues(
+            order, ticketIdAndTicketArchiveMap))
+        .build();
+  }
+
+  public Map<String, Object> buildPaymentSuccessAndExpiredEmailTemplateKeyAndValues(Order order,
+      Map<String, TicketArchive> ticketIdAndTicketArchiveMap) {
+    Map<String, Object> content =
+        buildEmailTemplateKeyAndValues(order, ticketIdAndTicketArchiveMap);
+    content.put("full_name", order.getFirstname() + " " + order.getLastname());
+    content.put("phone_number", order.getPhoneNumber());
+    return content;
+  }
+
+  private Map<String, Object> buildEmailTemplateKeyAndValues(Order order,
+      Map<String, TicketArchive> ticketIdAndTicketArchiveMap) {
+    Map<String, Object> content = new HashMap<>();
     List<Object> orderItemList = new ArrayList<>();
     for (OrderItem orderItem : order.getOrderItems()) {
       TicketArchive ticketArchive = ticketIdAndTicketArchiveMap.get(orderItem.getTicket().getId());
@@ -46,13 +85,7 @@ public class EmailTemplateUtil {
       orderItemMap.put("quantity", orderItem.getQuantity());
       orderItemList.add(orderItemMap);
     }
-
-    String paymentStatusUrl = sysparamProperties.getClientPaymentStatusLink() + "?order_id=" +
-        order.getMidtrans().getOrderId();
-
     content.put("orderItems", orderItemList);
-    content.put("payment_status_url", paymentStatusUrl);
-    content.put("link_to_snap_payment", order.getMidtrans().getRedirectUrl());
     content.put("order_id", order.getMidtrans().getOrderId());
     content.put("visit_date", dateUtil.toReversedDateOnlyFormat(order.getVisitDate()));
     return content;

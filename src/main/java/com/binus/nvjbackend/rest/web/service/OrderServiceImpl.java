@@ -70,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
   private ObjectMapper oMapper;
 
   @PostConstruct
-  public void init() throws NoSuchAlgorithmException {
+  public void init() {
     oMapper = new ObjectMapper();
   }
 
@@ -90,11 +90,7 @@ public class OrderServiceImpl implements OrderService {
     List<OrderItem> orderItems = orderItemService.createOrderItems(request.getOrderItems());
     Order.Midtrans midtrans = midtransService.createTransaction(request, orderItems);
     Order order = orderRepository.save(buildClientOrder(request, orderItems, midtrans));
-    Map<String, TicketArchive> ticketIdAndTicketArchiveMap =
-        ticketArchiveService.findTicketArchivesByTicketIdAndVersionMap(
-            generateTicketIdAndVersionMap(order));
-    emailTemplateService.sendEmailTemplate(
-        emailTemplateUtil.buildWaitingForPaymentEmail(order, ticketIdAndTicketArchiveMap));
+    checkMidtransTransactionStatusAndSendEmail(order);
     return order;
   }
 
@@ -104,7 +100,8 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public void handleNotification(Map<String, Object> requestBody) throws ParseException {
+  public void handleNotification(Map<String, Object> requestBody) throws ParseException,
+      TemplateException, MessagingException, IOException {
     validateRequestBody(requestBody);
     Order order = orderRepository.findByMidtransOrderId((String) requestBody.get("order_id"));
     if (Objects.isNull(order)) {
@@ -112,6 +109,7 @@ public class OrderServiceImpl implements OrderService {
     }
     validateSignatureKey(requestBody, order);
     Order updatedOrder = updateOrderToMongo(requestBody, order);
+    checkMidtransTransactionStatusAndSendEmail(updatedOrder);
   }
 
   @Override
@@ -132,10 +130,21 @@ public class OrderServiceImpl implements OrderService {
   public Page<Order> findByFilter(Integer page, Integer size, String orderBy, String sortBy,
       OrderFilterRequest request) {
     PageRequest pageRequest = otherUtil.validateAndGetPageRequest(page, size, orderBy, sortBy);
-    return orderRepository.findAllByIdAndFirstnameAndLastnameAndEmailAndPhoneNumberAndPaymentTypeAndManualOrderEqualsAndMidtransOrderIdAndMidtransTransactionStatus(
-        request.getId(), request.getFirstname(), request.getLastname(), request.getEmail(),
-        request.getPhoneNumber(), request.getPaymentType(), request.getIsManualOrder(),
-        request.getMidtransOrderId(), request.getMidtransTransactionStatus(), pageRequest);
+    return orderRepository.findAllByFilter(request.getId(), request.getFirstname(),
+        request.getLastname(), request.getEmail(), request.getPhoneNumber(),
+        request.getFromVisitDate(), request.getToVisitDate(), request.getPaymentType(),
+        request.getIsManualOrder(), request.getMidtransOrderId(),
+        request.getMidtransTransactionStatus(), pageRequest);
+  }
+
+  @Override
+  public void resendEmailByMidtransOrderId(String midtransOrderId) throws TemplateException,
+      MessagingException, IOException {
+    Order order = orderRepository.findByMidtransOrderId(midtransOrderId);
+    if (Objects.isNull(order)) {
+      throw new BaseException(ErrorCode.MIDTRANS_ORDER_ID_NOT_FOUND);
+    }
+    checkMidtransTransactionStatusAndSendEmail(order);
   }
 
   private void validateVisitDate(Date date) {
@@ -172,6 +181,24 @@ public class OrderServiceImpl implements OrderService {
         .isManualOrder(Boolean.FALSE)
         .orderItems(orderItems)
         .build();
+  }
+
+  private void checkMidtransTransactionStatusAndSendEmail(Order order)
+      throws TemplateException, MessagingException, IOException {
+    Map<String, TicketArchive> ticketIdAndTicketArchiveMap =
+        ticketArchiveService.findTicketArchivesByTicketIdAndVersionMap(
+            generateTicketIdAndVersionMap(order));
+
+    if (Objects.isNull(order.getMidtrans().getTransactionStatus())) {
+      emailTemplateService.sendEmailTemplate(
+          emailTemplateUtil.buildWaitingForPaymentEmail(order, ticketIdAndTicketArchiveMap));
+    } else if (order.getMidtrans().getTransactionStatus().equals("settlement")) {
+      emailTemplateService.sendEmailTemplate(
+          emailTemplateUtil.buildPaymentSuccessEmail(order, ticketIdAndTicketArchiveMap));
+    } else if (order.getMidtrans().getTransactionStatus().equals("expire")) {
+      emailTemplateService.sendEmailTemplate(
+          emailTemplateUtil.buildPaymentExpiredEmail(order, ticketIdAndTicketArchiveMap));
+    }
   }
 
   private Map<String, Integer> generateTicketIdAndVersionMap(Order order) {

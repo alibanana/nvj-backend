@@ -23,4 +23,6 @@ public class ApiPathClient {
   public static final String ORDER_HANDLE_NOTIFICATION = "/notification/handle";
 
   public static final String ORDER_DETAIL_BY_MIDTRANS_ORDER_ID = "/getDetailsByMidtransOrderId";
+
+  public static final String RESEND_EMAIL_BY_MIDTRANS_ORDER_ID = "/resendEmailByMidtransOrderId";
 }

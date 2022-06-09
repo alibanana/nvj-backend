@@ -18,12 +18,13 @@ public interface OrderService {
 
   Order createOrder(OrderRequest request);
 
-  Order createClientOrder(OrderClientRequest request)
-      throws MidtransError, TemplateException, MessagingException, IOException;
+  Order createClientOrder(OrderClientRequest request) throws MidtransError, TemplateException,
+      MessagingException, IOException;
 
   Boolean isMidtransOrderIdExists(String id);
 
-  void handleNotification(Map<String, Object> requestBody) throws ParseException;
+  void handleNotification(Map<String, Object> requestBody) throws ParseException, TemplateException,
+      MessagingException, IOException;
 
   Order findByMidtransOrderId(String midtransOrderId);
 
@@ -31,4 +32,7 @@ public interface OrderService {
 
   Page<Order> findByFilter(Integer page, Integer size, String orderBy, String sortBy,
       OrderFilterRequest request);
+
+  void resendEmailByMidtransOrderId(String midtransOrderId) throws TemplateException,
+      MessagingException, IOException;
 }
