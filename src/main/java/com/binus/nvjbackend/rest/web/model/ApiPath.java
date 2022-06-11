@@ -32,6 +32,8 @@ public class ApiPath {
 
   public static final String USER_FIND_BY_ID = "/findById";
 
+  public static final String USER_UPDATE_BY_ID = "/updateById";
+
   public static final String USER_DELETE_BY_ID = "/deleteById";
 
   public static final String CURRENT_USER_DETAILS = "/getCurrentUserDetails";
@@ -97,4 +99,6 @@ public class ApiPath {
   public static final String ORDER_FIND_BY_FILTER = "/findByFilter";
 
   public static final String ORDER_FIND_ALL = "/findAll";
+
+  public static final String ORDER_UPDATE_BY_ID = "/updateById";
 }

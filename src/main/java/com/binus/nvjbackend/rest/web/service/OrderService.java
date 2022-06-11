@@ -33,6 +33,8 @@ public interface OrderService {
   Page<Order> findByFilter(Integer page, Integer size, String orderBy, String sortBy,
       OrderFilterRequest request);
 
+  Order updateManualOrderById(String id, OrderRequest request);
+
   void resendEmailByMidtransOrderId(String midtransOrderId) throws TemplateException,
       MessagingException, IOException;
 }

@@ -3,12 +3,14 @@ package com.binus.nvjbackend.rest.web.service;
 import com.binus.nvjbackend.config.properties.SysparamProperties;
 import com.binus.nvjbackend.model.entity.Order;
 import com.binus.nvjbackend.model.entity.OrderItem;
+import com.binus.nvjbackend.model.entity.Ticket;
 import com.binus.nvjbackend.model.entity.TicketArchive;
 import com.binus.nvjbackend.model.enums.ErrorCode;
 import com.binus.nvjbackend.model.exception.BaseException;
 import com.binus.nvjbackend.repository.OrderRepository;
 import com.binus.nvjbackend.rest.web.model.request.order.OrderClientRequest;
 import com.binus.nvjbackend.rest.web.model.request.order.OrderFilterRequest;
+import com.binus.nvjbackend.rest.web.model.request.order.OrderItemRequest;
 import com.binus.nvjbackend.rest.web.model.request.order.OrderRequest;
 import com.binus.nvjbackend.rest.web.util.DateUtil;
 import com.binus.nvjbackend.rest.web.util.EmailTemplateUtil;
@@ -18,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.Hashing;
 import com.midtrans.httpclient.error.MidtransError;
 import freemarker.template.TemplateException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +38,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,6 +59,9 @@ public class OrderServiceImpl implements OrderService {
 
   @Autowired
   private EmailTemplateService emailTemplateService;
+
+  @Autowired
+  private TicketService ticketService;
 
   @Autowired
   private OrderRepository orderRepository;
@@ -138,6 +146,18 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
+  public Order updateManualOrderById(String id, OrderRequest request) {
+    Order order = Optional.of(orderRepository.findById(id)).get()
+        .orElse(null);
+    if (Objects.isNull(order)) {
+      throw new BaseException(ErrorCode.ORDER_ID_NOT_FOUND);
+    } else if (!order.getIsManualOrder()) {
+      throw new BaseException(ErrorCode.ORDER_MUST_BE_MANUAL_ORDER);
+    }
+    return updateManualOrder(order, request);
+  }
+
+  @Override
   public void resendEmailByMidtransOrderId(String midtransOrderId) throws TemplateException,
       MessagingException, IOException {
     Order order = orderRepository.findByMidtransOrderId(midtransOrderId);
@@ -181,6 +201,55 @@ public class OrderServiceImpl implements OrderService {
         .isManualOrder(Boolean.FALSE)
         .orderItems(orderItems)
         .build();
+  }
+
+  private Order updateManualOrder(Order order, OrderRequest request) {
+    BeanUtils.copyProperties(request, order);
+    List<OrderItem> updatedOrderItems = updateExistingOrderItems(request.getOrderItems(), order);
+    order.setOrderItems(updatedOrderItems);
+    List<OrderItem> newOrderItems = createNewOrderItems(request.getOrderItems(),
+        order.getOrderItems());
+    order.getOrderItems().addAll(newOrderItems);
+    return orderRepository.save(order);
+  }
+
+  private List<OrderItem> updateExistingOrderItems(List<OrderItemRequest> orderItemRequests, Order order) {
+    Map<String, Integer> requestTicketIdAndQuantityMap = orderItemRequests.stream()
+        .collect(Collectors.toMap(OrderItemRequest::getTicketId, OrderItemRequest::getQuantity));
+    List<OrderItem> updatedOrderItemList = new ArrayList<>();
+    for (OrderItem orderItem : order.getOrderItems()) {
+      Ticket ticket = ticketService.findById(orderItem.getTicket().getId());
+      if (requestTicketIdAndQuantityMap.containsKey(orderItem.getTicket().getId())
+          && orderItem.getTicketVersion().equals(ticket.getVersion())) {
+        if (!requestTicketIdAndQuantityMap.get(orderItem.getTicket().getId())
+            .equals(orderItem.getQuantity())) {
+          orderItem.setQuantity(requestTicketIdAndQuantityMap.get(orderItem.getTicket().getId()));
+        }
+        updatedOrderItemList.add(orderItemService.updateOrderItem(orderItem));
+      } else {
+        orderItemService.deleteById(orderItem.getId());
+      }
+    }
+    return updatedOrderItemList;
+  }
+
+  private List<OrderItem> createNewOrderItems(List<OrderItemRequest> orderItemRequests,
+      List<OrderItem> orderItems) {
+    Map<String, Integer> existingTicketIdAndVersionMap = orderItems.stream()
+        .collect(Collectors.toMap(orderItem -> orderItem.getTicket().getId(),
+            OrderItem::getTicketVersion));
+    List<OrderItemRequest> newOrderItemRequests = new ArrayList<>();
+    for (OrderItemRequest orderItemRequest : orderItemRequests) {
+      Ticket ticket = ticketService.findById(orderItemRequest.getTicketId());
+      if (!existingTicketIdAndVersionMap.containsKey(orderItemRequest.getTicketId())) {
+        newOrderItemRequests.add(orderItemRequest);
+      } else if (!existingTicketIdAndVersionMap.get(orderItemRequest.getTicketId())
+          .equals(ticket.getVersion())) {
+        newOrderItemRequests.add(orderItemRequest);
+      }
+    }
+    return newOrderItemRequests.isEmpty() ? new ArrayList<>() :
+        orderItemService.createOrderItems(newOrderItemRequests);
   }
 
   private void checkMidtransTransactionStatusAndSendEmail(Order order)

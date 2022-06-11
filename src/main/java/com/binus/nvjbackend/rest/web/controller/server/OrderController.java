@@ -17,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -57,6 +58,13 @@ public class OrderController extends BaseController {
     return toListResponse(orders.stream()
         .map(this::toOrderResponse)
         .collect(Collectors.toList()));
+  }
+
+  @PutMapping(value = ApiPath.ORDER_UPDATE_BY_ID)
+  public RestSingleResponse<OrderResponse> updateById(@RequestParam String id,
+      @Valid @RequestBody OrderRequest request) {
+    Order order = orderService.updateManualOrderById(id, request);
+    return toSingleResponse(toOrderResponse(order));
   }
 
   private OrderResponse toOrderResponse(Order order) {

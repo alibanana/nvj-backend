@@ -17,6 +17,8 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OrderItemRequest implements Serializable {
 
+  private static final long serialVersionUID = 8073908581568048813L;
+
   @NotBlank
   private String ticketId;
 

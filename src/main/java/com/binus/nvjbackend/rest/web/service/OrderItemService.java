@@ -8,4 +8,8 @@ import java.util.List;
 public interface OrderItemService {
 
   List<OrderItem> createOrderItems(List<OrderItemRequest> requests);
+
+  OrderItem updateOrderItem(OrderItem orderItem);
+
+  void deleteById(String id);
 }

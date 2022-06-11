@@ -46,6 +46,8 @@ public enum ErrorCode {
       "Password must have one or more lowercase character"),
   PASSWORD_DIGIT_COUNT_INVALID("ERR-PA40022", 400,
       "Password must have one or more numerical character"),
+  ORDER_MUST_BE_MANUAL_ORDER("ERR-PA40023", 400,
+      "The requested order is not a manual order"),
 
   USER_CREDENTIALS_INVALID("ERR-PA40101", 401,
       "The requested username and password is invalid"),
@@ -72,6 +74,8 @@ public enum ErrorCode {
       "The requested user does not exists"),
   IMAGE_NOT_FOUND("ERR-PA40409", 404,
       "The requested image does not exists"),
+  ORDER_ID_NOT_FOUND("ERR-PA40410", 404,
+      "The requested order id does not exists"),
 
   FILE_DELETION_FAILED("ERR-PA40901", 409,
       "The requested file cannot be deleted"),
@@ -96,6 +100,14 @@ public enum ErrorCode {
       "The requested on-site experience title already exists"),
   NEW_TICKET_TITLE_EXISTS("ERR-PA42210", 422,
       "The requested ticket title already exists"),
+  NEW_USER_FIRSTNAME_EXISTS("ERR-PA42211", 422,
+      "The requested new user's firstname already exists"),
+  NEW_USER_LASTNAME_EXISTS("ERR-PA42212", 422,
+      "The requested new user's lastname already exists"),
+  NEW_USER_USERNAME_EXISTS("ERR-PA42213", 422,
+      "The requested new user's username already exists"),
+  NEW_USER_EMAIL_EXISTS("ERR-PA42214", 422,
+      "The requested new user's email already exists"),
 
   UNSPECIFIED_ERROR("ERR-PA50001", 500,
       "Unspecified error that is not handled by generid handler"),

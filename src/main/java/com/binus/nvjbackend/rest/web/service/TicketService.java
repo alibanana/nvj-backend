@@ -16,6 +16,8 @@ public interface TicketService {
   Page<Ticket> findByFilter(Integer page, Integer size, String orderBy, String sortBy,
       TicketFilterRequest request, Boolean isClientApi);
 
+  Ticket findById(String id);
+
   List<Ticket> findByIds(List<String> ids);
 
   Ticket updateById(String id, TicketRequest request);

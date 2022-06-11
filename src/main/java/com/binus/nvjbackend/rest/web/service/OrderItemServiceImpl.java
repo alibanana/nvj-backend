@@ -2,6 +2,8 @@ package com.binus.nvjbackend.rest.web.service;
 
 import com.binus.nvjbackend.model.entity.OrderItem;
 import com.binus.nvjbackend.model.entity.Ticket;
+import com.binus.nvjbackend.model.enums.ErrorCode;
+import com.binus.nvjbackend.model.exception.BaseException;
 import com.binus.nvjbackend.repository.OrderItemRepository;
 import com.binus.nvjbackend.rest.web.model.request.order.OrderItemRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -32,6 +36,16 @@ public class OrderItemServiceImpl implements OrderItemService {
         .map(id -> buildOrderItem(id, ticketIdAndQuantityMap, ticketIdAndTicketMap))
         .collect(Collectors.toList());
     return orderItemRepository.saveAll(orderItems);
+  }
+
+  @Override
+  public OrderItem updateOrderItem(OrderItem orderItem) {
+    return orderItemRepository.save(orderItem);
+  }
+
+  @Override
+  public void deleteById(String id) {
+    orderItemRepository.deleteById(id);
   }
 
   private List<String> getTicketIdsFromRequests(List<OrderItemRequest> requests) {

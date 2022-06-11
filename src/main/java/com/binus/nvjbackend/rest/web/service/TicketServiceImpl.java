@@ -61,6 +61,16 @@ public class TicketServiceImpl implements TicketService {
   }
 
   @Override
+  public Ticket findById(String id) {
+    Ticket ticket = Optional.of(ticketRepository.findById(id)).get()
+        .orElse(null);
+    if (Objects.isNull(ticket)) {
+      throw new BaseException(ErrorCode.TICKET_NOT_FOUND);
+    }
+    return ticket;
+  }
+
+  @Override
   public List<Ticket> findByIds(List<String> ids) {
     List<Ticket> tickets = new ArrayList<>();
     ticketRepository.findAllById(ids).forEach(tickets::add);

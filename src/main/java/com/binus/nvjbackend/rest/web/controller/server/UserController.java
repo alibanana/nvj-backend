@@ -5,6 +5,7 @@ import com.binus.nvjbackend.rest.web.controller.BaseController;
 import com.binus.nvjbackend.rest.web.model.ApiPath;
 import com.binus.nvjbackend.rest.web.model.request.user.UserChangePasswordRequest;
 import com.binus.nvjbackend.rest.web.model.request.user.UserFilterRequest;
+import com.binus.nvjbackend.rest.web.model.request.user.UserRequest;
 import com.binus.nvjbackend.rest.web.model.response.RoleResponse;
 import com.binus.nvjbackend.rest.web.model.response.UserResponse;
 import com.binus.nvjbackend.rest.web.model.response.rest.RestBaseResponse;
@@ -13,12 +14,14 @@ import com.binus.nvjbackend.rest.web.model.response.rest.RestPageResponse;
 import com.binus.nvjbackend.rest.web.model.response.rest.RestSingleResponse;
 import com.binus.nvjbackend.rest.web.service.UserService;
 import com.binus.nvjbackend.rest.web.util.DateUtil;
+import com.google.zxing.WriterException;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -70,12 +74,18 @@ public class UserController extends BaseController {
     return toSingleResponse(toUserResponse(user));
   }
 
+  @PutMapping(value = ApiPath.USER_UPDATE_BY_ID)
+  public RestSingleResponse<UserResponse> updateById(@NotBlank @RequestParam String id,
+      @Valid @RequestBody UserRequest request) throws IOException, WriterException {
+    User user = userService.updateById(id, request);
+    return toSingleResponse(toUserResponse(user));
+  }
+
   @DeleteMapping(value = ApiPath.USER_DELETE_BY_ID)
   public RestBaseResponse deleteById(@NotBlank @RequestParam String id) {
     userService.deleteById(id);
     return toBaseResponse();
   }
-
 
   @PostMapping(value = ApiPath.CURRENT_USER_DETAILS)
   public RestSingleResponse<UserResponse> getCurrentUserDetails(HttpServletRequest request) {
