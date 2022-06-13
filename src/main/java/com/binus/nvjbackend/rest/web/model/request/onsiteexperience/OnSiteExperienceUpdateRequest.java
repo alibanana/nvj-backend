@@ -1,11 +1,14 @@
-package com.binus.nvjbackend.rest.web.model.response;
+package com.binus.nvjbackend.rest.web.model.request.onsiteexperience;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -14,13 +17,13 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OnSiteExperienceResponse implements Serializable {
+public class OnSiteExperienceUpdateRequest implements Serializable {
 
-  private static final long serialVersionUID = -3390474673456258067L;
+  private static final long serialVersionUID = -8399086238909662445L;
 
-  private String id;
+  @NotBlank
   private String title;
+
+  @NotBlank
   private String description;
-  private OnSiteExperienceImageResponse thumbnail;
-  private List<OnSiteExperienceImageResponse> images;
 }

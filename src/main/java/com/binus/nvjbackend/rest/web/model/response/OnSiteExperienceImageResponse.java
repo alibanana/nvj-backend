@@ -7,20 +7,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OnSiteExperienceResponse implements Serializable {
+public class OnSiteExperienceImageResponse implements Serializable {
 
-  private static final long serialVersionUID = -3390474673456258067L;
+  private static final long serialVersionUID = 407563343887406767L;
 
   private String id;
-  private String title;
-  private String description;
-  private OnSiteExperienceImageResponse thumbnail;
-  private List<OnSiteExperienceImageResponse> images;
+  private String url;
 }

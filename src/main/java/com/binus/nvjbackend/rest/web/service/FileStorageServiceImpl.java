@@ -4,9 +4,10 @@ import com.binus.nvjbackend.config.properties.SysparamProperties;
 import com.binus.nvjbackend.model.enums.ErrorCode;
 import com.binus.nvjbackend.model.exception.BaseException;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
@@ -19,7 +20,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -80,10 +80,20 @@ public class FileStorageServiceImpl implements FileStorageService {
   }
 
   private Path validateAndStoreFile(MultipartFile file) {
-    String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+    String filename = generateUniqueFilename(file.getOriginalFilename());
     validateFileNotEmpty(file);
     validateFileName(filename);
     return storeFile(file, filename);
+  }
+
+  private String generateUniqueFilename(String originalFilename) {
+    String extension = "." + FilenameUtils.getExtension(originalFilename);
+    String filename = RandomStringUtils.random(12, true, true);
+    while (Files.exists(
+        Paths.get(sysparamProperties.getFileStorageLocation() + filename + extension))) {
+      filename = RandomStringUtils.random(12, true, true);
+    }
+    return filename + extension;
   }
 
   private void validateFileNotEmpty(MultipartFile file) {

@@ -92,6 +92,15 @@ public class ApiPath {
 
   public static final String EXPERIENCE_FIND_BY_FILTER = "/findByFilter";
 
+  public static final String EXPERIENCE_UPDATE_BY_ID = "/updateById";
+
+  public static final String EXPERIENCE_UPDATE_THUMBNAIL_BY_ID = "/updateThumbnailById";
+
+  public static final String EXPERIENCE_REMOVE_IMAGE_BY_ID_AND_IMAGE_ID =
+      "/removeImageByIdAndImageId";
+
+  public static final String EXPERIENCE_ADD_IMAGE_BY_ID = "/addImageById";
+
   public static final String BASE_PATH_ORDER = BASE_PATH_API + "/orders";
 
   public static final String ORDER_CREATE = "/create";

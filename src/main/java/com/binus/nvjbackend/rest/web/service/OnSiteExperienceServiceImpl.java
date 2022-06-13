@@ -5,8 +5,11 @@ import com.binus.nvjbackend.model.entity.OnSiteExperience;
 import com.binus.nvjbackend.model.enums.ErrorCode;
 import com.binus.nvjbackend.model.exception.BaseException;
 import com.binus.nvjbackend.repository.OnSiteExperienceRepository;
+import com.binus.nvjbackend.rest.web.model.request.onsiteexperience.OnSiteExperienceAddImageRequest;
 import com.binus.nvjbackend.rest.web.model.request.onsiteexperience.OnSiteExperienceFilterRequest;
 import com.binus.nvjbackend.rest.web.model.request.onsiteexperience.OnSiteExperienceRequest;
+import com.binus.nvjbackend.rest.web.model.request.onsiteexperience.OnSiteExperienceUpdateRequest;
+import com.binus.nvjbackend.rest.web.model.request.onsiteexperience.OnSiteExperienceUpdateThumbnailRequest;
 import com.binus.nvjbackend.rest.web.util.OtherUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -75,6 +79,62 @@ public class OnSiteExperienceServiceImpl implements OnSiteExperienceService {
       throw new BaseException(ErrorCode.ON_SITE_EXPERIENCE_NOT_FOUND);
     }
     return onSiteExperience;
+  }
+
+  @Override
+  public OnSiteExperience updateById(String id, OnSiteExperienceUpdateRequest request) {
+    OnSiteExperience onSiteExperience = findById(id);
+    if (!onSiteExperience.getTitle().equals(request.getTitle())) {
+      validateOnSiteExperienceDoesNotExistsByTitle(request.getTitle());
+      onSiteExperience.setTitle(request.getTitle());
+    }
+    if (!onSiteExperience.getDescription().equals(request.getDescription())) {
+      onSiteExperience.setDescription(request.getDescription());
+    }
+    return onSiteExperienceRepository.save(onSiteExperience);
+  }
+
+  @Override
+  public OnSiteExperience updateThumbnailById(String id,
+      OnSiteExperienceUpdateThumbnailRequest request) {
+    OnSiteExperience onSiteExperience = findById(id);
+    imageService.deleteById(onSiteExperience.getThumbnail().getId());
+    Image thumbnail = imageService.uploadImage(request.getThumbnail());
+    onSiteExperience.setThumbnail(thumbnail);
+    return onSiteExperienceRepository.save(onSiteExperience);
+  }
+
+  @Override
+  public OnSiteExperience removeImageByIdAndImageId(String id, String imageId) {
+    OnSiteExperience onSiteExperience = findById(id);
+    List<String> existingImageIdlist = onSiteExperience.getImages().stream()
+        .map(Image::getId)
+        .collect(Collectors.toList());
+    if (!existingImageIdlist.contains(imageId)) {
+      throw new BaseException(ErrorCode.IMAGE_NOT_FOUND);
+    }
+    for (int i = 0; i < onSiteExperience.getImages().size(); i++) {
+      if (onSiteExperience.getImages().get(i).getId().equals(imageId)) {
+        onSiteExperience.getImages().remove(i);
+        imageService.deleteById(imageId);
+        break;
+      }
+    }
+    return onSiteExperienceRepository.save(onSiteExperience);
+  }
+
+  @Override
+  public OnSiteExperience addImageById(String id, OnSiteExperienceAddImageRequest request) {
+    OnSiteExperience onSiteExperience = findById(id);
+    Image image = imageService.uploadImage(request.getImage());
+    if (Objects.isNull(onSiteExperience.getImages())) {
+      List<Image> images = new ArrayList<>();
+      images.add(image);
+      onSiteExperience.setImages(images);
+    } else {
+      onSiteExperience.getImages().add(image);
+    }
+    return onSiteExperienceRepository.save(onSiteExperience);
   }
 
   private void validateOnSiteExperienceDoesNotExistsByTitle(String title) {
