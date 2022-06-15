@@ -76,6 +76,8 @@ public enum ErrorCode {
       "The requested image does not exists"),
   ORDER_ID_NOT_FOUND("ERR-PA40410", 404,
       "The requested order id does not exists"),
+  ON_SITE_EXPERIENCE_MAX_IMAGES_EXCEEDED("ERR-PA40410", 404,
+      "There are already 4 images on the requested on-site experience object"),
 
   FILE_DELETION_FAILED("ERR-PA40901", 409,
       "The requested file cannot be deleted"),

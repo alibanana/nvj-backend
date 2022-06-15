@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
@@ -30,5 +31,6 @@ public class OnSiteExperienceRequest implements Serializable {
   @NotNull
   private MultipartFile thumbnail;
 
+  @Size(max = 4)
   private List<MultipartFile> images;
 }
