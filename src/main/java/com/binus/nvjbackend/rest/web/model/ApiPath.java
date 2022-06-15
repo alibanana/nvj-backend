@@ -101,6 +101,8 @@ public class ApiPath {
 
   public static final String EXPERIENCE_ADD_IMAGE_BY_ID = "/addImageById";
 
+  public static final String EXPERIENCE_DELETE_BY_ID = "/deleteById";
+
   public static final String BASE_PATH_ORDER = BASE_PATH_API + "/orders";
 
   public static final String ORDER_CREATE = "/create";

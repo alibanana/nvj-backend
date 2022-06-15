@@ -137,6 +137,19 @@ public class OnSiteExperienceServiceImpl implements OnSiteExperienceService {
     return onSiteExperienceRepository.save(onSiteExperience);
   }
 
+  @Override
+  public void deleteById(String id) {
+    OnSiteExperience onSiteExperience = findById(id);
+    if (Objects.nonNull(onSiteExperience.getThumbnail())) {
+      imageService.deleteById(onSiteExperience.getThumbnail().getId());
+    }
+    if (Objects.nonNull(onSiteExperience.getImages()) && !onSiteExperience.getImages().isEmpty()) {
+      onSiteExperience.getImages()
+          .forEach(image -> imageService.deleteById(image.getId()));
+    }
+    onSiteExperienceRepository.deleteById(id);
+  }
+
   private void validateOnSiteExperienceDoesNotExistsByTitle(String title) {
      if (onSiteExperienceRepository.existsByTitle(title)) {
        throw new BaseException(ErrorCode.ON_SITE_EXPERIENCE_EXISTS);

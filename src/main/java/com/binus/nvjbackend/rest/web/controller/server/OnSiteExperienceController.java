@@ -105,6 +105,12 @@ public class OnSiteExperienceController extends BaseController {
     return toSingleResponse(toOnSiteExperienceResponse(onSiteExperience));
   }
 
+  @DeleteMapping(value = ApiPath.EXPERIENCE_DELETE_BY_ID)
+  public RestBaseResponse deleteById(@RequestParam @NotBlank String id) {
+    onSiteExperienceService.deleteById(id);
+    return toBaseResponse();
+  }
+
   private OnSiteExperienceResponse toOnSiteExperienceResponse(OnSiteExperience onSiteExperience) {
     return OnSiteExperienceResponse.builder()
         .id(onSiteExperience.getId())

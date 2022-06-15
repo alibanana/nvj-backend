@@ -30,4 +30,6 @@ public interface OnSiteExperienceService {
   OnSiteExperience removeImageByIdAndImageId(String id, String imageId);
 
   OnSiteExperience addImageById(String id, OnSiteExperienceAddImageRequest request);
+
+  void deleteById(String id);
 }

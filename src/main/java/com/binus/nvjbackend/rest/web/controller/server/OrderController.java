@@ -82,6 +82,7 @@ public class OrderController extends BaseController {
   private OrderItemResponse toOrderItemResponse(OrderItem orderItem) {
     return OrderItemResponse.builder()
         .id(orderItem.getId())
+        .ticketId(orderItem.getTicket().getId())
         .title(orderItem.getTicket().getTitle())
         .quantity(orderItem.getQuantity())
         .price(orderItem.getPrice())

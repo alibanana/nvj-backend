@@ -85,10 +85,13 @@ public class MidtransServiceImpl implements MidtransService {
 
   private Map<String, Object> buildItemDetail(OrderItem orderItem) {
     Map<String, Object> itemDetail = new HashMap<>();
+    String itemDetailName = orderItem.getTicket().getTitle().length() > 47 ?
+        orderItem.getTicket().getTitle().substring(0, 47) + "..." :
+        orderItem.getTicket().getTitle();
     itemDetail.put("id", orderItem.getId());
     itemDetail.put("price", orderItem.getPrice());
     itemDetail.put("quantity", orderItem.getQuantity());
-    itemDetail.put("name", orderItem.getTicket().getTitle());
+    itemDetail.put("name", itemDetailName);
     return itemDetail;
   }
 

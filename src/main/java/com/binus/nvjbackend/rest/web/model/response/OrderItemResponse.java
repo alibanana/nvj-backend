@@ -18,6 +18,7 @@ public class OrderItemResponse implements Serializable {
   private static final long serialVersionUID = -1402821524129061578L;
 
   private String id;
+  private String ticketId;
   private String title;
   private Integer quantity;
   private Double price;

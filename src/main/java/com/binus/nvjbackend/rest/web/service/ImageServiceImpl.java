@@ -49,7 +49,6 @@ public class ImageServiceImpl implements ImageService {
 
   @Override
   public void deleteImage(String filename) {
-    fileStorageService.validateFileExistsByFilename(filename);
     fileStorageService.removeFile(filename);
     imageRepository.deleteByName(filename);
   }
@@ -61,7 +60,6 @@ public class ImageServiceImpl implements ImageService {
     if (Objects.isNull(image)) {
       throw new BaseException(ErrorCode.IMAGE_NOT_FOUND);
     }
-    fileStorageService.validateFileExistsByFilename(image.getName());
     fileStorageService.removeFile(image.getName());
     imageRepository.deleteById(id);
   }

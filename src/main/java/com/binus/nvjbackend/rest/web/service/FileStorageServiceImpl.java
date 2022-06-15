@@ -3,6 +3,7 @@ package com.binus.nvjbackend.rest.web.service;
 import com.binus.nvjbackend.config.properties.SysparamProperties;
 import com.binus.nvjbackend.model.enums.ErrorCode;
 import com.binus.nvjbackend.model.exception.BaseException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -22,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
 
@@ -69,7 +71,7 @@ public class FileStorageServiceImpl implements FileStorageService {
   public void removeFile(String filename) {
     File file = new File(sysparamProperties.getFileStorageLocation() + filename);
     if(!file.delete()) {
-      throw new BaseException(ErrorCode.FILE_DELETION_FAILED);
+      log.error("Error!", new BaseException(ErrorCode.FILE_DELETION_FAILED));
     }
   }
 
