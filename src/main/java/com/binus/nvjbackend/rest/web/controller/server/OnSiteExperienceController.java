@@ -117,17 +117,34 @@ public class OnSiteExperienceController extends BaseController {
         .title(onSiteExperience.getTitle())
         .description(onSiteExperience.getDescription())
         .thumbnail(toOnSiteExperienceImageResponse(onSiteExperience.getThumbnail()))
-        .images(Objects.nonNull(onSiteExperience.getImages()) ? onSiteExperience.getImages()
+        .images(!isImagesActuallyNullOrEmpty(onSiteExperience) ? onSiteExperience.getImages()
             .stream()
             .map(this::toOnSiteExperienceImageResponse)
             .collect(Collectors.toList()) : null)
         .build();
   }
 
+  private boolean isImagesActuallyNullOrEmpty(OnSiteExperience onSiteExperience) {
+    boolean flag = Objects.nonNull(onSiteExperience.getImages()) &&
+        !onSiteExperience.getImages().isEmpty();
+    if (flag) {
+      boolean isImagePresent = false;
+      for (Image image : onSiteExperience.getImages()) {
+        if (Objects.nonNull(image)) {
+          isImagePresent = true;
+          break;
+        }
+      }
+      return !isImagePresent;
+    }
+    return true;
+  }
+
   private OnSiteExperienceImageResponse toOnSiteExperienceImageResponse(Image image) {
-    return OnSiteExperienceImageResponse.builder()
+    return Objects.nonNull(image) ? OnSiteExperienceImageResponse.builder()
         .id(image.getId())
         .url(image.getUrl())
-        .build();
+        .build() : null;
   }
 }
+
