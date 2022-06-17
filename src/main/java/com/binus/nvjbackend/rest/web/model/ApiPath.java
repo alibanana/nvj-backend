@@ -112,4 +112,8 @@ public class ApiPath {
   public static final String ORDER_FIND_ALL = "/findAll";
 
   public static final String ORDER_UPDATE_BY_ID = "/updateById";
+
+  public static final String BASE_PATH_STATISTIC = BASE_PATH_API + "/statistics";
+
+  public static final String STATISTIC_GET_WEEKLY_DATA = "/getWeeklyData";
 }

@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -92,5 +93,27 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     List<Order> orderList = mongoTemplate.find(query, Order.class);
     return PageableExecutionUtils.getPage(orderList, pageRequest,
         () -> mongoTemplate.count(Query.of(query).limit(-1).skip(-1), Order.class));
+  }
+
+  @Override
+  public List<Order> findOrderByCreationDate(Date fromCreateDate, Date toCreateDate) {
+    Query query = new Query();
+
+    query.fields()
+        .include(MongoFieldNames.ID)
+        .include(MongoFieldNames.ORDER_TOTAL_PRICE)
+        .include(MongoFieldNames.ORDER_ORDER_ITEMS);
+
+    if (Objects.nonNull(toCreateDate) && Objects.isNull(fromCreateDate)) {
+      query.addCriteria(where(MongoFieldNames.CREATED_AT)
+          .lte(toCreateDate));
+    }
+
+    if (Objects.nonNull(fromCreateDate) && Objects.nonNull(toCreateDate)) {
+      query.addCriteria(where(MongoFieldNames.CREATED_AT)
+          .gte(fromCreateDate).lte(toCreateDate));
+    }
+
+    return mongoTemplate.find(query, Order.class);
   }
 }

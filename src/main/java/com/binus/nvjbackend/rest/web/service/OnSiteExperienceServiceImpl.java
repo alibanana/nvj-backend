@@ -126,7 +126,7 @@ public class OnSiteExperienceServiceImpl implements OnSiteExperienceService {
   @Override
   public OnSiteExperience addImageById(String id, OnSiteExperienceAddImageRequest request) {
     OnSiteExperience onSiteExperience = findById(id);
-    if (onSiteExperience.getImages().size() == 4) {
+    if (Objects.nonNull(onSiteExperience.getImages()) && onSiteExperience.getImages().size() == 4) {
       throw new BaseException(ErrorCode.ON_SITE_EXPERIENCE_MAX_IMAGES_EXCEEDED);
     }
     Image image = imageService.uploadImage(request.getImage());

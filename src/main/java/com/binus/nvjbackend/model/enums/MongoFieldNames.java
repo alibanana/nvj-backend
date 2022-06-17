@@ -2,6 +2,10 @@ package com.binus.nvjbackend.model.enums;
 
 public interface MongoFieldNames {
 
+  // General
+  String ID = "id";
+  String CREATED_AT = "created_at";
+
   // User
   String USER_ID = "id";
   String USER_FIRSTNAME = "firstname";
@@ -30,8 +34,10 @@ public interface MongoFieldNames {
   String ORDER_EMAIL = "email";
   String ORDER_PHONE_NUMBER = "phoneNumber";
   String ORDER_VISIT_DATE = "visitDate";
+  String ORDER_TOTAL_PRICE = "totalPrice";
   String ORDER_PAYMENT_TYPE = "paymentType";
   String ORDER_IS_MANUAL_ORDER = "isManualOrder";
+  String ORDER_ORDER_ITEMS = "orderItems";
   String ORDER_MIDTRANS_ORDER_ID = "midtrans.orderId";
   String ORDER_MIDTRANS_TRANSACTION_STATUS = "midtrans.transactionStatus";
 }

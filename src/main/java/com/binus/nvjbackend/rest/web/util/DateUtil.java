@@ -39,7 +39,7 @@ public class DateUtil {
     return date.before(today);
   }
 
-  private Date getDateOnlyForToday() {
+  public Date getDateOnlyForToday() {
     Date date = new Date();
     date.setHours(0);
     date.setMinutes(0);

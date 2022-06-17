@@ -37,4 +37,6 @@ public interface OrderService {
 
   void resendEmailByMidtransOrderId(String midtransOrderId) throws TemplateException,
       MessagingException, IOException;
+
+  Map<String, Object> getWeeklyOrderData();
 }

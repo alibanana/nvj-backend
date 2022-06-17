@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.Hashing;
 import com.midtrans.httpclient.error.MidtransError;
 import freemarker.template.TemplateException;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -165,6 +166,34 @@ public class OrderServiceImpl implements OrderService {
       throw new BaseException(ErrorCode.MIDTRANS_ORDER_ID_NOT_FOUND);
     }
     checkMidtransTransactionStatusAndSendEmail(order);
+  }
+
+  @Override
+  public Map<String, Object> getWeeklyOrderData() {
+    Date to = dateUtil.getDateOnlyForToday();
+    Date from = DateUtils.addDays(to, -7);
+    List<Double> orderValues = new ArrayList<>();
+    List<Integer> orderCounts = new ArrayList<>();
+    List<Integer> ticketCounts = new ArrayList<>();
+    for (int i = 0; i < 7; i++) {
+      Date currentDate = DateUtils.addDays(from, i);
+      Date nextDate = DateUtils.addDays(from, i + 1);
+      List<Order> orders = orderRepository.findOrderByCreationDate(currentDate, nextDate);
+      orderValues.add(orders.stream().mapToDouble(Order::getTotalPrice).sum());
+      orderCounts.add(orders.size());
+      ticketCounts.add(orders.stream()
+          .map(order -> (Integer) order.getOrderItems().stream()
+              .map(OrderItem::getQuantity)
+              .mapToInt(Integer::intValue)
+              .sum())
+          .mapToInt(Integer::intValue)
+          .sum());
+    }
+    Map<String, Object> weeklyOrderData = new HashMap<>();
+    weeklyOrderData.put("orderValues", orderValues);
+    weeklyOrderData.put("orderCounts", orderCounts);
+    weeklyOrderData.put("ticketCounts", ticketCounts);
+    return weeklyOrderData;
   }
 
   private void validateVisitDate(Date date) {
