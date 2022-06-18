@@ -98,6 +98,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     } else if (userRepository.existsByEmail(registerRequest.getEmail())) {
       throw new BaseException(ErrorCode.EMAIL_ALREADY_EXISTS);
     }
+    otherUtil.validateEmail(registerRequest.getEmail());
     passwordUtil.validatePasswordValid(registerRequest.getPassword());
     otherUtil.validatePhoneNumber(registerRequest.getPhoneNumber());
     roleUtil.validateRoleType(registerRequest.getRoleType());

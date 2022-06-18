@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -89,7 +90,7 @@ public class FileStorageServiceImpl implements FileStorageService {
   }
 
   private String generateUniqueFilename(String originalFilename) {
-    String extension = "." + FilenameUtils.getExtension(originalFilename);
+    String extension = "." + FilenameUtils.getExtension(originalFilename).toLowerCase();
     String filename = RandomStringUtils.random(12, true, true);
     while (Files.exists(
         Paths.get(sysparamProperties.getFileStorageLocation() + filename + extension))) {

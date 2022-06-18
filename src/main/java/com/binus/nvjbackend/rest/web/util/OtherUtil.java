@@ -15,6 +15,13 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @Component
 public class OtherUtil {
 
+  public void validateEmail(String email) {
+    Pattern pattern = Pattern.compile("^(.+)@(\\\\S+)$");
+    if (!pattern.matcher(email).matches()) {
+      throw new BaseException(ErrorCode.USER_EMAIL_INVALID);
+    }
+  }
+
   public void validatePhoneNumber(String phoneNumber) {
     Pattern pattern =
         Pattern.compile("^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4,9}$");

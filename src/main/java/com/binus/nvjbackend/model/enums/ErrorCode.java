@@ -48,6 +48,8 @@ public enum ErrorCode {
       "Password must have one or more numerical character"),
   ORDER_MUST_BE_MANUAL_ORDER("ERR-PA40023", 400,
       "The requested order is not a manual order"),
+  USER_EMAIL_INVALID("ERR-PA40024", 400,
+      "Email requested is invalid, please re-check"),
 
   USER_CREDENTIALS_INVALID("ERR-PA40101", 401,
       "The requested username and password is invalid"),

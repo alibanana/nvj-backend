@@ -85,6 +85,7 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   public Order createOrder(OrderRequest request) {
+    otherUtil.validateEmail(request.getEmail());
     otherUtil.validatePhoneNumber(request.getPhoneNumber());
     validateVisitDate(request.getVisitDate());
     List<OrderItem> orderItems = orderItemService.createOrderItems(request.getOrderItems());
@@ -94,6 +95,7 @@ public class OrderServiceImpl implements OrderService {
   @Override
   public Order createClientOrder(OrderClientRequest request) throws MidtransError,
       TemplateException, MessagingException, IOException {
+    otherUtil.validateEmail(request.getEmail());
     otherUtil.validatePhoneNumber(request.getPhoneNumber());
     validateVisitDate(request.getVisitDate());
     List<OrderItem> orderItems = orderItemService.createOrderItems(request.getOrderItems());
