@@ -37,5 +37,6 @@ public class TicketRequest implements Serializable {
   @NotNull
   private Boolean purchasable;
 
+  @NotNull
   private Boolean markForDelete;
 }

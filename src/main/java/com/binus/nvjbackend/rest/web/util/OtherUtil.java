@@ -16,7 +16,7 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 public class OtherUtil {
 
   public void validateEmail(String email) {
-    Pattern pattern = Pattern.compile("^(.+)@(\\\\S+)$");
+    Pattern pattern = Pattern.compile("^(.+)@(\\S+)$");
     if (!pattern.matcher(email).matches()) {
       throw new BaseException(ErrorCode.USER_EMAIL_INVALID);
     }
