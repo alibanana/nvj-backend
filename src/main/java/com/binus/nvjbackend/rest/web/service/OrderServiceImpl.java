@@ -141,9 +141,11 @@ public class OrderServiceImpl implements OrderService {
   public Page<Order> findByFilter(Integer page, Integer size, String orderBy, String sortBy,
       OrderFilterRequest request) {
     PageRequest pageRequest = otherUtil.validateAndGetPageRequest(page, size, orderBy, sortBy);
-    request.getToVisitDate().setHours(23);
-    request.getToVisitDate().setMinutes(59);
-    request.getToVisitDate().setSeconds(59);
+    if (Objects.nonNull(request.getFromVisitDate())) {
+      request.getToVisitDate().setHours(23);
+      request.getToVisitDate().setMinutes(59);
+      request.getToVisitDate().setSeconds(59);
+    }
     return orderRepository.findAllByFilter(request.getId(), request.getFirstname(),
         request.getLastname(), request.getEmail(), request.getPhoneNumber(),
         request.getFromVisitDate(), request.getToVisitDate(), request.getPaymentType(),
