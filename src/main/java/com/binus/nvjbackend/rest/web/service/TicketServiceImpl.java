@@ -147,6 +147,9 @@ public class TicketServiceImpl implements TicketService {
     ticket.setPhoneNumber(request.getPhoneNumber());
     ticket.setContactName(request.getContactName());
     ticket.setPurchasable(request.getPurchasable());
+    if (!request.getMarkForDelete()) {
+      ticket.setMarkForDelete(request.getMarkForDelete());
+    }
     TicketArchive ticketArchive = ticketArchiveService.createAndReturnTicketArchive(request,
         ticket.getVersion() + 1);
     ticket.getTicketArchives().add(ticketArchive);

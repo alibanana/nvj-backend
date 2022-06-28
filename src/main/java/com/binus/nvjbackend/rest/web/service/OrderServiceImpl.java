@@ -141,6 +141,9 @@ public class OrderServiceImpl implements OrderService {
   public Page<Order> findByFilter(Integer page, Integer size, String orderBy, String sortBy,
       OrderFilterRequest request) {
     PageRequest pageRequest = otherUtil.validateAndGetPageRequest(page, size, orderBy, sortBy);
+    request.getToVisitDate().setHours(23);
+    request.getToVisitDate().setMinutes(59);
+    request.getToVisitDate().setSeconds(59);
     return orderRepository.findAllByFilter(request.getId(), request.getFirstname(),
         request.getLastname(), request.getEmail(), request.getPhoneNumber(),
         request.getFromVisitDate(), request.getToVisitDate(), request.getPaymentType(),
@@ -172,7 +175,7 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   public Map<String, Object> getWeeklyOrderData() {
-    Date to = dateUtil.getDateOnlyForToday();
+    Date to = DateUtils.addDays(dateUtil.getDateOnlyForToday(), 1);
     Date from = DateUtils.addDays(to, -7);
     List<Double> orderValues = new ArrayList<>();
     List<Integer> orderCounts = new ArrayList<>();
@@ -241,6 +244,7 @@ public class OrderServiceImpl implements OrderService {
     List<OrderItem> newOrderItems = createNewOrderItems(request.getOrderItems(),
         order.getOrderItems());
     order.getOrderItems().addAll(newOrderItems);
+    order.setTotalPrice(getTotalPrice(order.getOrderItems()));
     return orderRepository.save(order);
   }
 
